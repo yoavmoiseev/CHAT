@@ -1,0 +1,61 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>TikshuvChat-v1.0</title>
+  </head>
+  
+  
+  <body>
+    
+    <!-- TextBox with nickName  -->
+    <input type="text" value="Insert your nickname here" id="NickName"> 
+
+    
+    <p> <button onClick="sendMsg()">SEND Text</button>    
+    
+    <!--Text box- message send to server  -->
+    <input type="text" value="Type here..." id="text">    </p>
+    
+    <!-- TextBox for all messages      --> 
+    <p type="text" id="AllText">ALL Text</p>  
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.js"></script>
+    <script>
+      const socket = io("http://10.0.0.200:8080");
+
+      var nickName=document.getElementById("NickName"); 
+
+      var myText=document.getElementById("text");
+
+      var AllText=document.getElementById("AllText");
+
+      var flag = 2;
+
+      //SEND messages TO Server
+      function sendMsg() {
+        socket.emit("message", String(flag) +  nickName.value + "-" + myText.value);
+        flag = 1;
+       
+
+      }
+
+      //GET messages FROM server
+      socket.on("message", function(data)
+       {
+     
+        line = document.createElement("p");
+        line.innerText = data ;
+        AllText.appendChild(line);
+
+        });
+
+
+    </script>
+  </body>
+</html>
