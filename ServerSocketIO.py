@@ -36,8 +36,7 @@ async def print_message(sid, message):
     #Building List of clients on base of SocketID, started above- after "import"----------------------------
     if ( str(sid) not in SocketList):
         SocketList.append(str(sid))
-        print( message[1:message.find("-")] +
-         ", entered to the chat. Time:" + time.asctime()  ) 
+        print( message[1:message.find(" ")] + ", entered to the chat. Time:" + time.asctime() ) 
     
     if(message[0]=="2"):
         for line in MessagesList:

@@ -1,61 +1,160 @@
 <!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>TikshuvChat-v1.0</title>
-  </head>
-  
-  
-  <body>
-    
-    <!-- TextBox with nickName  -->
-    <input type="text" value="Insert your nickname here" id="NickName"> 
+    <title>TikshuvChat-v3.0</title>
+</head>
 
+<style>
+    /* SPLIT PAGE */
     
-    <p> <button onClick="sendMsg()">SEND Text</button>    
+    .split {
+        height: 100%;
+        width: 10%;
+        position: fixed;
+        top: 0;
+        z-index: 1;
+    }
     
-    <!--Text box- message send to server  -->
-    <input type="text" value="Type here..." id="text">    </p>
+    .left {
+        left: 0;
+        /* background-color: yellow;*/
+        width: 100%;
+    }
     
-    <!-- TextBox for all messages      --> 
-    <p type="text" id="AllText">ALL Text</p>  
+    .right {
+        right: 0;
+        /* background-color:black; */
+    }
+    /* SPLIT PAGE */
+</style>
+
+<body onunload="ChatClosed()" onload="sendFirstMsg()">
+
+    <div class="split left">
+
+        <!-- TextBox with nickName    value="NickName..." -->
+        <input type="text" placeholder="NickName... without spaces" onblur="freezNickName()" style="font-size:larger ;" id="nickName">
+
+        <!-- Send Message button  -->
+        <p> <button onClick="sendMsg()" style="font-size:larger ;" id="SendMsgButton">Send the message</button>
+
+            <!--Text box- message send to server  value="Type here..."     -->
+            <input type="text" placeholder="Type here..." style="font-size:larger ;" id="myText" size="110"> </p>
+
+        <!-- TextBox for all messages      -->
+        <p type="text" style="font-size:larger ;" id="AllText">All the messages</p>
+    </div>
+    <!-- Users list in right side  -->
+    <div class="split right">
+        <p style="font-size:large ;">List of nick names</p>
+        <p type="text" id="UsersColumn" ondblclick="OpenPrivetWindow(window.getSelection().toString())" style="font-size:larger ;" href=""></p>
+    </div>
+
 
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.js"></script>
     <script>
-      const socket = io("http://10.0.0.200:8080");
+        const socket = io("http://10.0.0.200:8080");
+        var flag = 2;
 
-      var nickName=document.getElementById("NickName"); 
 
-      var myText=document.getElementById("text");
+        //list of colors to be assigned to users
+        listOfcolors = ["red ", "blue ", "brown ", "OrangeRed ", "black ", "green ", "pink ", "grey ", "purpule ",
+            "orange ", "DeepPink ", "Indigo ", "DarkRed ", "LimeGreen ", "Aqua ", "CadetBlue ", "RosyBrown "
+        ]
 
-      var AllText=document.getElementById("AllText");
+        listOfClients = []
+        var privateWindows = []
+        colorIndex = 0
+        blockPeriod_MilSec = 2000 //disables the sendMessage button for several seconds
 
-      var flag = 2;
+        //============================= FUNCTIONS  ==================================
+        //===========================================================================
+        //the nickName texBox will be locked after the correct nickName inserted
+        function freezNickName() {
+            //replace spaces with underscore
+            nickName.value = nickName.value.replaceAll(' ', '_')
+            if (listOfClients.includes(nickName.value)) {
+                alert("This nickName already used! Please enter another nickName")
+                nickName.value = ""
 
-      //SEND messages TO Server
-      function sendMsg() {
-        socket.emit("message", String(flag) +  nickName.value + "-" + myText.value);
-        flag = 1;
-       
+            } else
+                nickName.disabled = true
+        }
+        //=========================================================================
+        //doubleClick on user name in the nickName list will
+        //open a new window for private chat
+        function OpenPrivetWindow(userID) {
+            i = listOfClients.indexOf(userID)
+                //the window is closed
+            if (!privateWindows[i] || privateWindows[i].closed) {
+                privateWindows[i] = window.open("", "", "width = 800, height = 600 ")
+                privateWindows[i].document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>");
 
-      }
+            } else { //the window is open
+                privateWindows[i].focus()
 
-      //GET messages FROM server
-      socket.on("message", function(data)
-       {
-     
-        line = document.createElement("p");
-        line.innerText = data ;
-        AllText.appendChild(line);
+            }
 
+        }
+        //=========================================================================
+        //closes privet windows when main chat closed
+        function ChatClosed() {
+            for (let i = 0; i < privateWindows.length; i++)
+                privateWindows[i].close()
+        }
+        //=========================================================================
+        //SEND messages TO Server======================================================
+        function sendMsg() {
+            if (nickName.disabled == true) {
+                socket.emit("message", String(flag) + nickName.value + "   " + myText.value);
+                flag = 1;
+                myText.value = ""
+            } else
+                alert("Input Valid nickName")
+                //block spumming, lock the send button fo several seconds,sleep function
+            SendMsgButton.disabled = true
+            setTimeout(function() {
+                SendMsgButton.disabled = false
+            }, blockPeriod_MilSec);
+        }
+        //=========================================================================
+        //sends message to server when the chat page opened first time
+        //to cause the sever sending all the information to newly opend client
+        function sendFirstMsg() {
+            //!!!!!!!!!!!! BUG - the server prints the empty nickName
+            socket.emit("message", String(2) + nickName.value + "   " + myText.value);
+        }
+
+        //GET messages FROM server==========================================================
+        socket.on("message", function(data) {
+            line = document.createElement("p");
+            line.innerText = data //Writes to the text box
+            NickNameline = document.createElement("p");
+
+            //AllText.appendChild(line); //Adds text to buttom
+            AllText.insertAdjacentElement("afterbegin", line); //Adds text to Head
+
+            nick = String(data)
+            nick = nick.substring(0, nick.indexOf(" "));
+            // If new client coonnect...
+            if (!listOfClients.includes(nick)) {
+                listOfClients.push(nick)
+
+                NickNameline.style.color = listOfcolors[listOfClients.indexOf(nick) % listOfcolors.length];
+                NickNameline.innerText = nick;
+                UsersColumn.insertAdjacentElement("afterbegin", NickNameline);
+            }
+
+            line.style.color = listOfcolors[listOfClients.indexOf(nick) % listOfcolors.length];
         });
-
-
     </script>
-  </body>
+</body>
+
 </html>
