@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>TikshuvChat-v5.0</title>
+    <link rel="stylesheet" href="static/css/styles.css" />
+</head>
+
+<body onload="MainOpen()" onunload="ChatClosed()">
+
+    <div class="container">
+        
+        <!-- Left Panel -->
+        <div class="split left">
+            <p style="font-size: 30px; font-weight: bold; text-align: left;" id="Heading">Main Chat</p>
+
+            <input type="text" placeholder="NickName... No spaces" onblur="freezNickName()" style="font-size:larger;" id="nickName">
+            <input type="text" placeholder="Create Password" oninput="HidePassword(event)" onblur="freezPassword()" style="font-size:larger;" id="passWord">
+        </div>
+
+     <!-- Middle Panel (Messages) -->
+<div class="split middle">
+    
+    <!-- Message input section (Send button on the left) -->
+    <div class="message-input">
+        <input type="text" id="myText" placeholder="Type your message...">
+        <button id="SendMsgButton" onclick="sendMsg()">Send</button>
+    </div>
+
+    <!-- Messages container -->
+    <div id="scrollableMessages">
+        <p style="font-size:larger;" id="AllText">All the messages</p>
+    </div>
+
+</div>
+
+        <!-- Right Panel (Users List) -->
+        <div class="split right">
+            <p style="font-size:large;">List of nicknames</p>
+            <p id="UsersColumn" ondblclick="GetNickName(window.getSelection().toString(), this.innerText)" style="font-size:larger;"></p>
+        </div>
+
+    </div>
+
+    <script src="static/js/socket.io.js"></script>
+    <script src="static/js/main.js"></script>
+</body>
+
+</html>

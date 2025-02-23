@@ -1,0 +1,130 @@
+/* === General styles === */
+body {
+    margin: 0; /* Removes default browser margin */
+    padding: 0; /* Removes default browser padding */
+    font-family: "Helvetica", "Arial", sans-serif;/* Sets default font */
+    background-color: #f4f4f4; /* Light gray background */
+}
+
+/* === Main container that holds all sections (left, middle, right) === */
+.container {
+    display: flex; /* Uses flexbox to align left, middle, and right panels in a row */
+    height: 100vh; /* Makes container fill full screen height */
+}
+
+/* === General panel styling (applies to left, middle, and right) === */
+.split {
+    height: 100vh; /* Makes each panel stretch full height */
+    padding: 20px; /* Adds spacing inside each panel */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Adds subtle shadow for depth */
+    display: flex; /* Enables flexible child positioning */
+    flex-direction: column; /* Ensures child elements are stacked vertically */
+}
+
+/* === Left Panel (User settings: Nickname & Password) === */
+.left {
+    width: 15%; /* Takes up 15% of total width */
+    background-color: #7e7575; /* Left background */
+    border-right: 2px solid #ddd; /* Adds a right border for separation */
+}
+
+/* Left panel heading styles */
+.left p {
+    font-size: 24px; /* Increases font size */
+    font-weight: bold; /* Makes text bold */
+    color: #333; /* Dark gray text for readability */
+}
+
+/* === Input fields and buttons inside left panel === */
+input[type="text"], button {
+    width: 90%; /* Sets uniform width for text input & buttons */
+    padding: 10px; /* Adds padding for better usability */
+    margin-top: 10px; /* Adds space between inputs */
+    border: 1px solid #9d7979; /* Light gray border */
+    border-radius: 5px; /* Rounds the corners */
+    font-size: 16px; /* Sets font size */
+}
+
+/* Changes border color when input is active */
+input[type="text"]:focus {
+    border-color: #007bff; /* Highlights input with blue border when clicked */
+    outline: none; /* Removes default browser outline */
+}
+
+
+/* === Middle Panel (Chat messages) === */
+.middle {
+    flex-grow: 1; /* Allows this section to take up remaining space */
+    background-color: #9a8a8a; /* Light gray background */
+    display: flex; /* Enables flexible child positioning */
+    flex-direction: column; /* Ensures child elements are stacked vertically */
+    justify-content: flex-start; /* Aligns content to the top */
+}
+
+/* === Message input section (Button on the left, input on the right) === */
+.message-input {
+    display: flex; /* Ensures button and input field are in the same row */
+    align-items: center; /* Aligns them vertically */
+    gap: 10px; /* Adds space between button and input */
+    padding: 10px 0;
+    width: 100%; /* Ensures it takes full width of the middle panel */
+}
+
+/* === Send Button (Left Side) === */
+.message-input button {
+    padding: 5px 10px; /* Minimal padding around text */
+    font-size: 14px; /* Reduce font size to make it smaller */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: auto; /* Allows button to shrink to text size */
+    min-width: 50px; /* Prevents button from being too small */
+}
+
+
+.message-input button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+/* Disabled Button */
+button:disabled {
+    background-color: #b5b5b5 !important; /* Gray when disabled */
+    color: #666 !important; /* Darker text */
+    cursor: not-allowed; /* Show "not allowed" cursor */
+    border: 1px solid #999 !important;
+    opacity: 0.6;
+}
+
+
+
+/* === Input field (Right Side) === */
+.message-input input {
+    flex-grow: 1; /* Makes input take up remaining space */
+    padding: 10px;
+    border: 1px solid #95e3d9;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* === Messages container === */
+#scrollableMessages {
+    max-height: 85vh; /* Restricts height to 85% of the viewport */
+    overflow-y: auto; /* Enables vertical scrolling if content overflows */
+    border: 1px solid #ccc; /* Light gray border */
+    background-color: #a7acb9; /* Background for ALL Messages */
+    padding: 10px; /* Adds inner spacing */
+    width: 98%; /* Ensures message box stays within middle panel */
+    border-radius: 15px; /* Makes the corners rounded */
+    font-style: italic; /* Makes text italic */
+}
+
+/* === Right Panel (User List) === */
+.right {
+    width: 12%; /* Takes up 12% of total width */
+    background-color: #c1b5b5; /* Right Panel background */
+    font-weight: bold;  /* Makes text bold */
+
+}

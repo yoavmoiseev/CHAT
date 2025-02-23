@@ -1,96 +1,95 @@
 import os
-from ast import Constant
-from asyncio import constants
-from email.message import Message
-from operator import indexOf
 import time
 from aiohttp import web
 import socketio
 
-# Creating Lists
-SocketList = []
-UsersList = []
+import consts # type: ignore
 
-# containing all the messages from all users
-MessagesList = []
+# Lists to store socket connections, users, and messages
+socket_list = []
+users_list = []
+messages_list = []
 
-## creates a new Async Socket IO Server
+
+# Create a new Async Socket IO Server
 sio = socketio.AsyncServer()
-## Creates a new Aiohttp Web Application
+
+# Create a new Aiohttp Web Application
 app = web.Application()
-# Binds our Socket.IO server to our Web App
-## instance
+
+# Bind our Socket.IO server to our Web App instance
 sio.attach(app)
 
+# This allows requests from any IP, including 127.0.0.1, 192.168.X.X, and 10.0.0.X.
+# sio = socketio.AsyncServer(cors_allowed_origins="*") 
 
-# =====================================================================
-# the server opens the "index.html" file for defined connection
-# 10.0.0.200:8080 with the default path '/' --> "10.0.0.200:8080/"
+
+#==========================================================================================
+#removing the following code take affect after a while- the index.html will failed with 404 error 
+# add path to solitted index.html
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get the directory of ServerSocketIo.py
+STATIC_DIR = os.path.join(BASE_DIR, consts.static_folder_name)  # Path to the static folder
+app.router.add_static('/static/', STATIC_DIR)  # Add the static folder to the app
+#==========================================================================================
+
+
+# Serve the "index.html" file for the root path
 async def index(request):
-    file_path = os.path.join(os.path.dirname(__file__), 'index.html')
+    file_path = os.path.join(os.path.dirname(__file__), consts.main_chat_html_file_name)
+    with open(file_path) as f:
+        return web.Response(text=f.read(), content_type='text/html')
+
+# Serve the "Private_chat.html" file for the "/prChat" path
+async def private_chat(request):
+    file_path = os.path.join(os.path.dirname(__file__), consts.private_chat_html_file_name)
     with open(file_path) as f:
         return web.Response(text=f.read(), content_type='text/html')
 
 
-# the server opens the HTML file for private chat
-# when the path is "10.0.0.200:8080/prChat"
-async def privateChat(request):
-    file_path = os.path.join(os.path.dirname(__file__), 'Private_chat.html')
-    with open(file_path) as f:
-        return web.Response(text=f.read(), content_type='text/html')
+
+# Bind our aiohttp endpoints to our app router
+app.router.add_get(consts.main_chat_indicator, index)
+app.router.add_get(consts.private_chat_indicator, private_chat)
 
 
-## We bind our aiohttp endpoint to our app
-## router
-app.router.add_get('/', index)
-app.router.add_get('/prChat', privateChat)
 
 
-## If we wanted to create a new websocket endpoint,
-## use this decorator, passing in the name of the
-## event we wish to listen out for
+
+# Handle incoming messages
 @sio.on('message')
-async def print_message(sid, message):
-    nicknameDelimiter = " :"
-    nickname = message[1:message.find(nicknameDelimiter)]
-    startPosition= len(nickname) + len(nicknameDelimiter) + 2 # message index and space before the password
-    password = message[startPosition : message.find(" :", startPosition)]
-    
-    # Building List of clients on base of SocketID, started above- after "import"----------------------------
-    if message[0] == "2": # 2: new user entered
-        #  check the first item of every tuple in list
-        #     not in the list
-        if all(nickname != item[0] for item in UsersList):
-            UsersList.append([nickname, password])
-            print(nickname + ", entered to the chat. Time:" + time.asctime())
-            # for debugging
-            print(UsersList)
-        else: #the nickname already in list
-            for item in UsersList:
-                if (item[0]==nickname):# find this user
-                    if (item[1] == password): # check the password is correct
-                        print("Come In!")
-                    else:
-                        print("Wrong Password", message)
-                        ## back to the client
-                        await sio.emit('message', "Wrong Password", to=sid)
-                        return
-    
-    # first message
-    if(message[0] == "2"):
-        message = message.replace(nicknameDelimiter + " " + password,"",1) #remove the password
-    print(message)
+async def handle_message(sid, message):
+    # Get the nickname and password from the message
+    nickname = message[1:message.find(consts.nickname_delimiter)]
+    start_position = len(nickname) + len(consts.nickname_delimiter) + 2
+    password = message[start_position:message.find(consts.password_delimiter, start_position)]
 
-    # Sends chat history to new clients
-    if (message[0] == "2" or message[0] == "4"):
-        for line in MessagesList:
-            await sio.emit('message', line, to=sid)  # to send to ALL- delete-->  to=sid
-    
-    MessagesList.append(message)
-    
-    ## back to the client
+    # Handle new user entry
+    if message[0] == consts.main_chat_first:
+        # Check the nickname does not exist
+        if all(nickname != item[0] for item in users_list):
+            users_list.append([nickname, password])
+            print(f"{nickname} entered the chat. Time: {time.asctime()}")
+        else: # the nickname exists
+            for item in users_list:
+                #if the nickname exist but the password is wrong
+                if item[0] == nickname and item[1] != password:
+                    await sio.emit('message', "Wrong Password", to=sid)
+                    return
+
+    # Remove password from the first message
+    if message[0] == consts.main_chat_first:
+        message = message.replace(consts.nickname_delimiter + " " + password, "", 1)
+
+    # Send chat history to new clients
+    if message[0] in [consts.main_chat_first, consts.private_chat_first]:
+        for line in messages_list:
+            await sio.emit('message', line, to=sid)
+
+    messages_list.append(message)
+
+    # Send the message back to the client
     await sio.emit('message', message)
 
-## We kick off our server
+# Start the server
 if __name__ == '__main__':
     web.run_app(app)

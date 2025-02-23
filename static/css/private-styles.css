@@ -1,0 +1,77 @@
+/* Set the entire page background to gray */
+body {
+    background-color: #b0b0b0; /* Medium gray */
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: #333; /* Dark gray text */
+}
+
+/* Layout: Left, Middle, Right panels */
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* General panel styling */
+.split {
+    height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Left and Right Panels */
+.left, .right {
+    width: 20%;
+    background-color: #c0c0c0; /* Light gray */
+}
+
+/* Middle Panel */
+.middle {
+    flex-grow: 1;
+    background-color: #a8a8a8; /* Medium gray */
+}
+
+/* Message input section (Button on the left, input on the right) */
+.message-input {
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+}
+
+/* Send Button */
+.message-input button {
+    padding: 5px 10px;
+    background-color: #606060;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Input Field */
+.message-input input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #888;
+    background-color: #d0d0d0;
+}
+
+/* Messages Container */
+#scrollableMessages {
+    max-height: 70vh;
+    overflow-y: auto;
+    border: 1px solid #888;
+    background-color: #d3d3d3;
+    padding: 10px;
+    width: 90%;
+    text-align: left; /* Ensures all messages align to the left */
+}
+
+/* Message Text */
+#AllText {
+    background-color: #e0e0e0;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: left; /* Aligns text to the left */
+}

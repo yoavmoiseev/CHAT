@@ -1,0 +1,29 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Private Chat</title>
+    <link rel="stylesheet" href="static/css/private-styles.css" />
+</head>
+<!-- =onload= run when the page opens, onunload= when closed     -->
+<body onload="PrivateOpen()" onunload="ChatClosed()"></body>
+<p>
+    <type=text style="font-size: 24px; font-weight: bold; color: blue;" ; id="Heading"> Private Chat!
+        <!--Text box- message send to server  value="Type here..."     -->
+        <p><input type=text size="99" id="myText" placeholder="Type here..." < /p>
+            <!-- onClick="window.parent.sendPrivate()"  -->
+            <p> <button onClick="sendPrivate()"> Send the message</button>   
+                  <!-- TextBox for all messages      -->
+                 <div id="scrollableMessages" style="max-height: 900px; overflow-y: auto; border: 1px solid #ccc;">
+                    <p type="text" background-color: gray; style="font-size:larger ;" id="AllText">All the messages</p>
+                </div>
+
+<script src="static/js/socket.io.js"></script>
+<script src="static/js/private.js"></script>
+</body>
+
+</html>
