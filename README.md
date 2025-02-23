@@ -17,6 +17,9 @@ Installation & Setup
 Server-Side
 
 Ensure you have Python 3.10 installed on a Windows environment.
+Download and extract the "Chat.rar" file that includes all the code files and python libriries.  
+The "ServerIO.py" is in the main directory.
+The "static" folder includes the backend files.
 
 Run the server script:
 
