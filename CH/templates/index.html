@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Auto Chat</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+</head>
+<body>
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <button class="lang-btn active" data-lang="he">עברית</button>
+        <button class="lang-btn" data-lang="ru">Русский</button>
+        <button class="lang-btn" data-lang="en">English</button>
+    </div>
+
+    <!-- Authentication Screen -->
+    <div id="auth-screen" class="screen active">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h1 data-i18n="app_title">🎓 School Auto Chat</h1>
+                <p data-i18n="app_subtitle">Offline classroom chat</p>
+            </div>
+            
+            <!-- Registration Form -->
+            <div id="register-form" class="auth-form active">
+                <h2 data-i18n="register_title">Registration</h2>
+                <form id="register-form-element" onsubmit="return false;">
+                    <div class="form-group">
+                        <label data-i18n="username">Username</label>
+                        <input type="text" id="register-username" data-i18n-placeholder="username_placeholder" autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="password">Password</label>
+                        <input type="password" id="register-password" data-i18n-placeholder="password_placeholder" autocomplete="new-password">
+                    </div>
+                    <button type="button" id="register-btn" class="btn-primary" data-i18n="register_btn">Register</button>
+                </form>
+                <div class="auth-switch">
+                    <span data-i18n="have_account">Already have an account?</span>
+                    <button id="switch-to-login" class="link-btn" data-i18n="switch_to_login">Login</button>
+                </div>
+                <div id="register-error" class="error-message"></div>
+                <div id="register-success" class="success-message"></div>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="login-form" class="auth-form">
+                <h2 data-i18n="login_title">Login</h2>
+                <form id="login-form-element" onsubmit="return false;">
+                    <div class="form-group">
+                        <label data-i18n="username">Username</label>
+                        <input type="text" id="login-username" data-i18n-placeholder="username_placeholder" autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="password">Password</label>
+                        <input type="password" id="login-password" data-i18n-placeholder="password_placeholder" autocomplete="current-password">
+                    </div>
+                    <button type="button" id="login-btn" class="btn-primary" data-i18n="login_btn">Login</button>
+                </form>
+                <div class="auth-switch">
+                    <span data-i18n="no_account">Don't have an account?</span>
+                    <button id="switch-to-register" class="link-btn" data-i18n="switch_to_register">Register</button>
+                </div>
+                <div id="login-error" class="error-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Screen -->
+    <div id="chat-screen" class="screen">
+        <div class="chat-container">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h2 data-i18n="participants">Participants</h2>
+                    <span id="online-count" class="online-badge">0</span>
+                </div>
+                <div id="users-list" class="users-list"></div>
+                
+                <div class="sidebar-footer">
+                    <div class="user-info">
+                        <span id="current-username" data-i18n="you">You</span>
+                        <span id="admin-badge" class="admin-badge" style="display: none;"><span data-i18n="admin">Admin</span> 👑</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Chat Area -->
+            <div class="main-chat">
+                <div class="chat-header">
+                    <h2 id="chat-title" data-i18n="public_chat">Public Chat</h2>
+                    <div class="chat-tabs">
+                        <button class="tab-btn active" data-tab="public" data-i18n="public_chat">Public Chat</button>
+                        <button class="tab-btn" data-tab="teacherbot"><span data-i18n="teacherbot">TeacherBot</span> 🤖</button>
+                    </div>
+                </div>
+
+                <!-- Public Chat -->
+                <div id="public-chat" class="chat-content active">
+                    <div id="public-messages" class="messages"></div>
+                    <div class="input-area">
+                        <input type="text" id="public-input" class="message-input" data-i18n-placeholder="message_placeholder" autocomplete="off">
+                        <button id="public-send-btn" class="btn-send">📤</button>
+                    </div>
+                </div>
+
+                <!-- TeacherBot Chat -->
+                <div id="teacherbot-chat" class="chat-content">
+                    <div class="teacherbot-header">
+                        <div class="bot-avatar">🤖</div>
+                        <div class="bot-info">
+                            <h3 data-i18n="teacherbot_title">TeacherBot</h3>
+                            <p data-i18n="teacherbot_description">Ask a question and I'll find information in the knowledge base</p>
+                        </div>
+                    </div>
+                    <div id="teacherbot-messages" class="messages"></div>
+                    <div class="input-area">
+                        <input type="text" id="teacherbot-input" class="message-input" data-i18n-placeholder="teacherbot_placeholder" autocomplete="off">
+                        <button id="teacherbot-send-btn" class="btn-send">🔍</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Context Menu for Private Messages -->
+    <div id="context-menu" class="context-menu" style="display: none;">
+        <button id="private-message-btn"><span data-i18n="private_message">Private Message</span> 💬</button>
+    </div>
+
+    <!-- Private Message Modal -->
+    <div id="private-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><span data-i18n="private_message_to">Private message for</span> <span id="private-recipient"></span></h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="private-message-input" class="private-textarea" data-i18n-placeholder="message_placeholder"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button id="send-private-btn" class="btn-primary" data-i18n="send">Send</button>
+                <button class="btn-secondary close-btn" data-i18n="cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
