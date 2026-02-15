@@ -6,7 +6,6 @@
     <title>School Auto Chat</title>
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
 </head>
 <body>
     <!-- Language Selector -->
@@ -148,6 +147,44 @@
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='app.js') }}"></script>
+    <script>
+        (function(){
+            const sources = [
+                '{{ url_for('static', filename='socket.io.min.js') }}',
+                '/socket.io/socket.io.js',
+                'https://cdn.socket.io/4.6.0/socket.io.min.js'
+            ];
+
+            function tryLoad(idx){
+                if(idx >= sources.length){
+                    console.warn('Socket.IO client not available from any source — will use stub socket.');
+                    loadApp();
+                    return;
+                }
+
+                const src = sources[idx];
+                const s = document.createElement('script');
+                s.src = src;
+                s.async = false;
+                s.onload = function(){
+                    console.log('Loaded Socket.IO client from', src);
+                    loadApp();
+                };
+                s.onerror = function(){
+                    console.warn('Failed to load Socket.IO client from', src);
+                    tryLoad(idx + 1);
+                };
+                document.head.appendChild(s);
+            }
+
+            function loadApp(){
+                const a = document.createElement('script');
+                a.src = '{{ url_for('static', filename='app.js') }}';
+                document.body.appendChild(a);
+            }
+
+            tryLoad(0);
+        })();
+    </script>
 </body>
 </html>

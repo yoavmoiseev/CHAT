@@ -1,10 +1,13 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, join_room, leave_room
 import os
+import sys
 import json
+import socket
 from datetime import datetime
 from teacherbot import TeacherBot
 import hashlib
+import socket as _socket
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'school-auto-chat-secret-key'
@@ -18,6 +21,20 @@ registered_users = {}
 users = {}
 # ID хоста (админа) - первый подключившийся
 admin_sid = None
+
+# Соберём локальные адреса сервера (loopback + hostname addresses)
+try:
+    _LOCAL_IPS = set(['127.0.0.1', '::1'])
+    hostname = _socket.gethostname()
+    # gethostbyname_ex возвращает (hostname, aliaslist, ipaddrlist)
+    try:
+        _, _, addrs = _socket.gethostbyname_ex(hostname)
+        for a in addrs:
+            _LOCAL_IPS.add(a)
+    except Exception:
+        pass
+except Exception:
+    _LOCAL_IPS = set(['127.0.0.1', '::1'])
 
 # Функции для работы с базой пользователей
 def load_users():
@@ -72,10 +89,30 @@ def handle_connect():
     """Обработка подключения пользователя"""
     global admin_sid
     
-    # Первый подключившийся становится админом
-    if admin_sid is None:
+    # Если клиент подключается с локального хоста сервера — назначаем его админом.
+    client_ip = request.remote_addr
+    client_is_local = client_ip in _LOCAL_IPS
+
+    if client_is_local:
+        prev_admin = admin_sid
         admin_sid = request.sid
-        print(f'Admin connected: {request.sid}')
+        print(f'Admin connected (local): {request.sid} from {client_ip}')
+        # уведомим нового админа (и снимем флаг у предыдущего, если он был)
+        try:
+            if prev_admin and prev_admin != admin_sid:
+                socketio.emit('admin_status', {'is_admin': False}, room=prev_admin)
+        except Exception:
+            pass
+        try:
+            socketio.emit('admin_status', {'is_admin': True}, room=admin_sid)
+        except Exception:
+            pass
+    else:
+        # Если админ ещё не назначен, первый не-локальный подключившийся
+        # всё ещё может стать админом (сохранённая логика)
+        if admin_sid is None:
+            admin_sid = request.sid
+            print(f'Admin connected: {request.sid} (non-local)')
     
     print(f'User connected: {request.sid}')
 
@@ -190,6 +227,7 @@ def handle_join(data):
         'sid': sid,
         'username': username,
         'is_admin': is_admin,
+        'blocked': registered_users.get(username, {}).get('blocked', False),
         'color': user_color
     }
     
@@ -217,6 +255,11 @@ def handle_public_message(data):
     sid = request.sid
     if sid not in users:
         return
+    username = users[sid]['username']
+    # Проверка блокировки
+    if registered_users.get(username, {}).get('blocked', False) or users[sid].get('blocked'):
+        emit('error', {'message': f'user_blocked'} , room=sid)
+        return
     
     message_data = {
         'username': users[sid]['username'],
@@ -234,6 +277,10 @@ def handle_private_message(data):
     """Обработка приватного сообщения"""
     sid = request.sid
     if sid not in users:
+        return
+    username = users[sid]['username']
+    if registered_users.get(username, {}).get('blocked', False) or users[sid].get('blocked'):
+        emit('error', {'message': f'user_blocked'} , room=sid)
         return
     
     target_username = data['to']
@@ -269,6 +316,10 @@ def handle_teacherbot_query(data):
     sid = request.sid
     if sid not in users:
         return
+    username = users[sid]['username']
+    if registered_users.get(username, {}).get('blocked', False) or users[sid].get('blocked'):
+        emit('error', {'message': f'user_blocked'} , room=sid)
+        return
     
     query = data['query']
     username = users[sid]['username']
@@ -291,23 +342,123 @@ def handle_teacherbot_query(data):
     emit('teacherbot_response', bot_message, room=sid)
     print(f"TeacherBot response sent to {username}")
 
+
+# --- Admin actions: block/unblock/delete users ---
+@socketio.on('block_user')
+def handle_block_user(data):
+    sid = request.sid
+    if sid != admin_sid:
+        emit('error', {'message': 'not_authorized'})
+        return
+    target = data.get('username')
+    if not target or target not in registered_users:
+        emit('error', {'message': 'user_not_found'})
+        return
+    registered_users[target]['blocked'] = True
+    save_users()
+    # update online user if present
+    target_sid = None
+    for s, u in users.items():
+        if u['username'] == target:
+            users[s]['blocked'] = True
+            target_sid = s
+            try:
+                emit('blocked', {'username': target}, room=target_sid)
+            except Exception:
+                pass
+            break
+    emit('users_update', {'users': list(users.values())}, broadcast=True)
+    emit('user_blocked', {'username': target}, broadcast=True)
+
+@socketio.on('unblock_user')
+def handle_unblock_user(data):
+    sid = request.sid
+    if sid != admin_sid:
+        emit('error', {'message': 'not_authorized'})
+        return
+    target = data.get('username')
+    if not target or target not in registered_users:
+        emit('error', {'message': 'user_not_found'})
+        return
+    registered_users[target]['blocked'] = False
+    save_users()
+    for s, u in users.items():
+        if u['username'] == target:
+            users[s]['blocked'] = False
+            try:
+                emit('unblocked', {'username': target}, room=s)
+            except Exception:
+                pass
+            break
+    emit('users_update', {'users': list(users.values())}, broadcast=True)
+    emit('user_unblocked', {'username': target}, broadcast=True)
+
+@socketio.on('delete_user')
+def handle_delete_user(data):
+    sid = request.sid
+    if sid != admin_sid:
+        emit('error', {'message': 'not_authorized'})
+        return
+    target = data.get('username')
+    if not target or target not in registered_users:
+        emit('error', {'message': 'user_not_found'})
+        return
+    # remove from registered users
+    try:
+        del registered_users[target]
+        save_users()
+    except Exception:
+        pass
+    # disconnect if online and remove from users
+    target_sid = None
+    for s, u in list(users.items()):
+        if u['username'] == target:
+            target_sid = s
+            try:
+                emit('user_deleted', {'username': target}, room=s)
+                socketio.disconnect(s)
+            except Exception:
+                pass
+            if s in users:
+                del users[s]
+    # notify clients to remove messages from this user
+    emit('remove_messages', {'username': target}, broadcast=True)
+    emit('users_update', {'users': list(users.values())}, broadcast=True)
+    emit('user_deleted_broadcast', {'username': target}, broadcast=True)
+
 if __name__ == '__main__':
     # Загрузка базы пользователей
     load_users()
     print(f'Loaded {len(registered_users)} registered users')
-    
+
     # Создание папки для базы знаний, если её нет
     if not os.path.exists('knowledge_base'):
         os.makedirs('knowledge_base')
         print('Created knowledge_base folder - add your TXT and HTML files there!')
-    
+
+    # Определение порта: сначала аргумент командной строки, затем переменная окружения, иначе стандартный
+    port = None
+    if len(sys.argv) > 1:
+        try:
+            port = int(sys.argv[1])
+        except Exception:
+            port = None
+
+    if not port:
+        port_env = os.environ.get('PORT')
+        if port_env and port_env.isdigit():
+            port = int(port_env)
+
+    if not port:
+        port = 5002
+
     # Запуск сервера
     print('=' * 50)
     print('School Auto Chat Server Starting...')
     print('=' * 50)
     print('Server will be available at:')
-    print('  Local:   http://127.0.0.1:5000')
-    print('  Network: http://<your-ip>:5000')
+    print(f'  Local:   http://127.0.0.1:{port}')
+    print(f'  Network: http://<your-ip>:{port}')
     print('=' * 50)
-    
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True)
+
+    socketio.run(app, host='0.0.0.0', port=port, debug=True)

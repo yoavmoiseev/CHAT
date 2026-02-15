@@ -1,5 +1,35 @@
 // WebSocket соединение
-const socket = io();
+let socket;
+function createStubSocket(){
+    console.warn('Socket.IO client unavailable — using stub socket (no real-time features).');
+    const noop = ()=>{};
+    return {
+        on: noop,
+        emit: noop,
+        off: noop
+    };
+}
+
+if (typeof io === 'undefined') {
+    // show visible warning to user
+    document.addEventListener('DOMContentLoaded', ()=>{
+        const warn = document.createElement('div');
+        warn.style.position = 'fixed';
+        warn.style.left = '0';
+        warn.style.right = '0';
+        warn.style.top = '0';
+        warn.style.background = '#ffebeb';
+        warn.style.color = '#900';
+        warn.style.padding = '8px 12px';
+        warn.style.zIndex = '4000';
+        warn.style.textAlign = 'center';
+        warn.textContent = 'Warning: real-time connection (socket.io) failed to load. Check network or place socket.io.min.js in /static/.';
+        document.body.appendChild(warn);
+    });
+    socket = createStubSocket();
+} else {
+    socket = io();
+}
 
 // Состояние приложения
 let currentUsername = '';
@@ -54,11 +84,17 @@ const chatContents = document.querySelectorAll('.chat-content');
 const langButtons = document.querySelectorAll('.lang-btn');
 
 // === INITIALIZATION ===
-document.addEventListener('DOMContentLoaded', async () => {
+async function initApp() {
     await loadTranslations();
     setLanguage('he'); // Default to Hebrew
     setupEventListeners();
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
 
 // === TRANSLATIONS ===
 async function loadTranslations() {
@@ -188,8 +224,10 @@ function setupEventListeners() {
             
             if (tab === 'public') {
                 document.getElementById('public-chat').classList.add('active');
+                publicInput.focus();
             } else if (tab === 'teacherbot') {
                 document.getElementById('teacherbot-chat').classList.add('active');
+                teacherbotInput.focus();
             }
         });
     });
@@ -325,6 +363,54 @@ socket.on('error', (data) => {
     alert(data.message);
 });
 
+socket.on('blocked', (data) => {
+    if (data.username === currentUsername) {
+        alert('You have been blocked by the admin and cannot send messages.');
+    }
+});
+
+socket.on('unblocked', (data) => {
+    if (data.username === currentUsername) {
+        alert('You have been unblocked by the admin.');
+    }
+});
+
+socket.on('user_blocked', (data) => {
+    addSystemMessage(`${data.username} has been blocked by admin`, new Date().toLocaleTimeString());
+});
+
+socket.on('user_unblocked', (data) => {
+    addSystemMessage(`${data.username} has been unblocked by admin`, new Date().toLocaleTimeString());
+});
+
+socket.on('remove_messages', (data) => {
+    if (!data || !data.username) return;
+    removeMessagesByUsername(data.username);
+});
+
+socket.on('user_deleted_broadcast', (data) => {
+    addSystemMessage(`${data.username} was deleted by admin`, new Date().toLocaleTimeString());
+});
+
+socket.on('user_deleted', (data) => {
+    // If this client was deleted, show info and return to auth
+    if (data.username === currentUsername) {
+        alert('Your account was deleted by admin.');
+        window.location.reload();
+    }
+});
+
+function removeMessagesByUsername(username) {
+    document.querySelectorAll('.message').forEach(m => {
+        const unameEl = m.querySelector('.message-username');
+        if (!unameEl) return;
+        // Exact match or contains
+        if (unameEl.textContent && (unameEl.textContent === username || unameEl.textContent.indexOf(username) !== -1)) {
+            m.remove();
+        }
+    });
+}
+
 // === ПУБЛИЧНЫЕ СООБЩЕНИЯ ===
 function sendPublicMessage() {
     const message = publicInput.value.trim();
@@ -431,6 +517,7 @@ function addUserQueryToBot(query) {
     
     teacherbotMessages.appendChild(messageDiv);
     teacherbotMessages.scrollTop = teacherbotMessages.scrollHeight;
+    teacherbotInput.focus();
 }
 
 function addTeacherBotResponse(data) {
@@ -470,6 +557,7 @@ function addTeacherBotResponse(data) {
     
     teacherbotMessages.appendChild(messageDiv);
     teacherbotMessages.scrollTop = teacherbotMessages.scrollHeight;
+    teacherbotInput.focus();
 }
 
 // === ПРИВАТНЫЕ СООБЩЕНИЯ ===
@@ -493,6 +581,13 @@ function updateUsersList(users) {
         name.className = 'user-name';
         name.textContent = user.username;
         name.style.color = user.color || '#667eea';
+        if (user.blocked) {
+            const blockedMark = document.createElement('span');
+            blockedMark.className = 'user-blocked';
+            blockedMark.textContent = ' (blocked)';
+            name.appendChild(blockedMark);
+            userItem.classList.add('blocked');
+        }
         
         userItem.appendChild(avatar);
         userItem.appendChild(name);
@@ -507,7 +602,7 @@ function updateUsersList(users) {
         // Правый клик для приватного сообщения
         userItem.addEventListener('contextmenu', (e) => {
             e.preventDefault();
-            showContextMenu(e.pageX, e.pageY, user.username);
+            showContextMenu(e.pageX, e.pageY, user.username, user);
         });
         
         // Двойной клик для приватного сообщения
@@ -521,6 +616,56 @@ function updateUsersList(users) {
 
 function showContextMenu(x, y, username) {
     selectedUser = username;
+    // Build dynamic context menu
+    contextMenu.innerHTML = '';
+
+    // Private message button
+    const pmBtn = document.createElement('button');
+    pmBtn.id = 'private-message-btn';
+    pmBtn.textContent = t('private_message') || 'Private Message';
+    pmBtn.addEventListener('click', () => {
+        contextMenu.style.display = 'none';
+        openPrivateMessageModal(selectedUser);
+    });
+    contextMenu.appendChild(pmBtn);
+
+    // Admin controls
+    if (isAdmin) {
+        const hr = document.createElement('hr');
+        contextMenu.appendChild(hr);
+
+        const blockBtn = document.createElement('button');
+        blockBtn.id = 'admin-block-btn';
+        blockBtn.textContent = 'Block';
+        blockBtn.addEventListener('click', () => {
+            contextMenu.style.display = 'none';
+            if (confirm('Block user ' + selectedUser + '?')) {
+                socket.emit('block_user', { username: selectedUser });
+            }
+        });
+        contextMenu.appendChild(blockBtn);
+
+        const unblockBtn = document.createElement('button');
+        unblockBtn.id = 'admin-unblock-btn';
+        unblockBtn.textContent = 'Unblock';
+        unblockBtn.addEventListener('click', () => {
+            contextMenu.style.display = 'none';
+            socket.emit('unblock_user', { username: selectedUser });
+        });
+        contextMenu.appendChild(unblockBtn);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.id = 'admin-delete-btn';
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.addEventListener('click', () => {
+            contextMenu.style.display = 'none';
+            if (confirm('Delete user ' + selectedUser + ' and optionally remove their messages?')) {
+                socket.emit('delete_user', { username: selectedUser });
+            }
+        });
+        contextMenu.appendChild(deleteBtn);
+    }
+
     contextMenu.style.display = 'block';
     contextMenu.style.left = x + 'px';
     contextMenu.style.top = y + 'px';
