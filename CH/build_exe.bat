@@ -26,3 +26,13 @@ pyinstaller --noconfirm --onedir \
 
 echo Build finished. See dist\start_server\ (folder with exe and data)
 pause
+REM Copy run_debug.bat into dist if present
+if exist "run_debug.bat" (
+  if exist "dist\start_server\" (
+    copy /Y "run_debug.bat" "dist\start_server\" >nul
+    echo Copied run_debug.bat to dist\start_server\
+  ) else if exist "dist\start_server.exe" (
+    copy /Y "run_debug.bat" "dist\" >nul
+    echo Copied run_debug.bat to dist\
+  )
+)

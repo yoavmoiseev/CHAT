@@ -73,6 +73,23 @@ try {
 Write-Host "Running PyInstaller (onedir)..."
 & $INSTALL_PY -m PyInstaller --noconfirm --onedir --add-data "templates;templates" --add-data "static;static" --add-data "knowledge_base;knowledge_base" --add-data "users_db.json;." start_server.py
 
-if ($LASTEXITCODE -eq 0) { Write-Host "Build complete: dist\start_server\ (folder with exe and data)" -ForegroundColor Green } else { Write-Error "PyInstaller failed" }
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "Build complete: dist\start_server\ (folder with exe and data)" -ForegroundColor Green
+    # Copy run_debug.bat into the dist folder so users can run packaged exe and capture logs
+    $src = Join-Path (Get-Location) 'run_debug.bat'
+    $destOnedir = Join-Path (Join-Path (Get-Location) 'dist') 'start_server'
+    $destSingle = Join-Path (Get-Location) 'dist'
+    if (Test-Path $destOnedir) {
+        Copy-Item $src -Destination $destOnedir -Force
+        Write-Host "Copied run_debug.bat to $destOnedir"
+    } elseif (Test-Path (Join-Path $destSingle 'start_server.exe')) {
+        Copy-Item $src -Destination $destSingle -Force
+        Write-Host "Copied run_debug.bat to $destSingle"
+    } else {
+        Write-Host "Could not find dist output to copy run_debug.bat"
+    }
+} else {
+    Write-Error "PyInstaller failed"
+}
 
 Pop-Location
