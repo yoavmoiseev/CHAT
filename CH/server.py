@@ -11,9 +11,23 @@ import socket as _socket
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'school-auto-chat-secret-key'
-# Determine async mode from environment to support portable builds
-async_mode = os.environ.get('SOCKETIO_ASYNC_MODE', 'threading')
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode=async_mode)
+# Determine async mode: prefer env override, then try eventlet/gevent, fallback to threading
+env_mode = os.environ.get('SOCKETIO_ASYNC_MODE', '').lower()
+detected_mode = None
+if env_mode:
+    detected_mode = env_mode
+else:
+    try:
+        import eventlet  # type: ignore
+        detected_mode = 'eventlet'
+    except Exception:
+        try:
+            import gevent  # type: ignore
+            detected_mode = 'gevent'
+        except Exception:
+            detected_mode = 'threading'
+
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode=detected_mode)
 
 # Хранилище зарегистрированных пользователей
 USERS_FILE = 'users_db.json'
