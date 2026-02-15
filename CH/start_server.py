@@ -67,11 +67,21 @@ if __name__ == '__main__':
         add_firewall_rule(port)
 
     # Run server in-process so packaged executables work without re-execing
-    # Import server module and start its SocketIO server
+    # Allow forcing async mode via env var SOCKETIO_ASYNC_MODE (eventlet/threading)
+    mode = os.environ.get('SOCKETIO_ASYNC_MODE', 'eventlet')
+    os.environ['SOCKETIO_ASYNC_MODE'] = mode
+    if mode == 'eventlet':
+        try:
+            import eventlet
+            eventlet.monkey_patch()
+            print('Applied eventlet.monkey_patch()')
+        except Exception as ex:
+            print('Failed to apply eventlet.monkey_patch():', ex)
+
     try:
         import server
         host = os.environ.get('HOST', '127.0.0.1')
-        print(f'Starting server in-process on {host}:{port}')
+        print(f'Starting server in-process on {host}:{port} (async_mode={mode})')
         server.socketio.run(server.app, host=host, port=port, debug=True)
     except Exception as e:
         print('Failed to start server in-process:', e)

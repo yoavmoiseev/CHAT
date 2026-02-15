@@ -11,10 +11,9 @@ import socket as _socket
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'school-auto-chat-secret-key'
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
-
-# Use threading async mode for maximum portability in single-folder executables
-# (avoids requiring eventlet/gevent which may be unavailable in some environments)
+# Determine async mode from environment to support portable builds
+async_mode = os.environ.get('SOCKETIO_ASYNC_MODE', 'threading')
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode=async_mode)
 
 # Хранилище зарегистрированных пользователей
 USERS_FILE = 'users_db.json'
