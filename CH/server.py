@@ -27,7 +27,15 @@ else:
         except Exception:
             detected_mode = 'threading'
 
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode=detected_mode)
+# Try initializing with the detected async mode; fall back to threading on failure
+try:
+    socketio = SocketIO(app, cors_allowed_origins="*", async_mode=detected_mode)
+except ValueError:
+    try:
+        socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+    except Exception as ex:
+        # final fallback: default initialization (may still fail)
+        socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Хранилище зарегистрированных пользователей
 USERS_FILE = 'users_db.json'
