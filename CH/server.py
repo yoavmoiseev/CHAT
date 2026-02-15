@@ -11,7 +11,10 @@ import socket as _socket
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'school-auto-chat-secret-key'
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+
+# Use threading async mode for maximum portability in single-folder executables
+# (avoids requiring eventlet/gevent which may be unavailable in some environments)
 
 # Хранилище зарегистрированных пользователей
 USERS_FILE = 'users_db.json'
@@ -461,4 +464,6 @@ if __name__ == '__main__':
     print(f'  Network: http://<your-ip>:{port}')
     print('=' * 50)
 
-    socketio.run(app, host='0.0.0.0', port=port, debug=True)
+    # Bind to localhost by default for portable/offline builds to avoid firewall prompts
+    host = os.environ.get('HOST', '127.0.0.1')
+    socketio.run(app, host=host, port=port, debug=True)
