@@ -70,9 +70,9 @@ try {
     }
 }
 
-Write-Host "Running PyInstaller (onefile)..."
-& $INSTALL_PY -m PyInstaller --noconfirm --onefile --add-data "templates;templates" --add-data "static;static" --add-data "knowledge_base;knowledge_base" --add-data "users_db.json;." start_server.py
+Write-Host "Running PyInstaller (onedir)..."
+& $INSTALL_PY -m PyInstaller --noconfirm --onedir --add-data "templates;templates" --add-data "static;static" --add-data "knowledge_base;knowledge_base" --add-data "users_db.json;." start_server.py
 
-if ($LASTEXITCODE -eq 0) { Write-Host "Build complete: dist\start_server.exe" -ForegroundColor Green } else { Write-Error "PyInstaller failed" }
+if ($LASTEXITCODE -eq 0) { Write-Host "Build complete: dist\start_server\ (folder with exe and data)" -ForegroundColor Green } else { Write-Error "PyInstaller failed" }
 
 Pop-Location

@@ -69,9 +69,9 @@ if errorlevel 1 (
   )
 )
 
-REM Build exe via PyInstaller
-echo Building single-file exe with PyInstaller...
-%INSTALL_PY% -m pyinstaller --noconfirm --onefile --add-data "templates;templates" --add-data "static;static" --add-data "knowledge_base;knowledge_base" --add-data "users_db.json;." start_server.py
+REM Build exe via PyInstaller (onedir -> folder with exe + data)
+echo Building onedir package with PyInstaller...
+%INSTALL_PY% -m pyinstaller --noconfirm --onedir --add-data "templates;templates" --add-data "static;static" --add-data "knowledge_base;knowledge_base" --add-data "users_db.json;." start_server.py
 
-echo Build complete. See dist\start_server.exe
+echo Build complete. See dist\start_server\ (folder with exe and data)
 pause

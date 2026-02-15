@@ -9,7 +9,8 @@ def is_port_free(p):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     try:
-        s.bind(('0.0.0.0', p))
+        # bind to localhost to avoid opening network interface (prevents firewall prompts)
+        s.bind(('127.0.0.1', p))
         s.close()
         return True
     except Exception:
@@ -21,7 +22,8 @@ def choose_port():
             return p
     # fallback: ask OS for a free port
     s = socket.socket()
-    s.bind(('', 0))
+    # bind to localhost for the same reason
+    s.bind(('127.0.0.1', 0))
     port = s.getsockname()[1]
     s.close()
     return port
@@ -64,6 +66,13 @@ if __name__ == '__main__':
     if open_fw == '1':
         add_firewall_rule(port)
 
-    # Run server.py with chosen port
-    python = sys.executable
-    os.execv(python, [python, os.path.join(os.path.dirname(__file__), 'server.py'), str(port)])
+    # Run server in-process so packaged executables work without re-execing
+    # Import server module and start its SocketIO server
+    try:
+        import server
+        host = os.environ.get('HOST', '127.0.0.1')
+        print(f'Starting server in-process on {host}:{port}')
+        server.socketio.run(server.app, host=host, port=port, debug=True)
+    except Exception as e:
+        print('Failed to start server in-process:', e)
+        raise
