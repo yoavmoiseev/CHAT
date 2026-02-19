@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>School Auto Chat — Руководство (RU) — DEMO</title>
+  <style>body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#111;padding:20px}header{background:#0066aa;color:#fff;padding:16px;border-radius:6px}section{border:1px solid #e6e6e6;padding:16px;border-radius:6px;margin-top:12px}pre{background:#f4f6fb;padding:12px;border-radius:6px;overflow:auto}</style>
+</head>
+<body>
+  <header>
+    <h1>School Auto Chat — Руководство (DEMO)</h1>
+    <p>Это демо-версия. Тестируйте локально и запускайте через <strong>run.bat</strong>.</p>
+  </header>
+
+  <section>
+    <h2>Коротко</h2>
+    <p>Обычный чат + TeacherBot — бот, который ищет термины в локальной папке <code>knowledge_base</code> (TXT/HTML). Бот возвращает контекст первого вхождения термина в каждом файле. Техническая рекомендация: термин в базе должен появляться только <strong>один раз</strong> в файлах (однократное вхождение), чтобы результаты были предсказуемы.</p>
+  </section>
+
+  <section>
+    <h2>Запуск (Windows)</h2>
+    <p>Запустите:</p>
+    <pre><code>run.bat</code></pre>
+    <p>При первом запуске Windows предложит разрешить доступ в брандмауэре. Нажмите <strong>Yes / Разрешить</strong> — откройте порт для локальной сети, чтобы клиенты могли подключаться.</p>
+  </section>
+
+  <section>
+    <h2>Примеры (взято из вашей базы знаний)</h2>
+    <p>Ниже — фрагменты из файлов в <code>knowledge_base</code> (демо):</p>
+    <h3>Русский</h3>
+    <pre><code>1.  IT — область технологий, связанная с использованием компьютеров, сетей, программного обеспечения и данных.
+31. Firewall — система фильтрации сетевого трафика.
+38. IP Address — логический адрес устройства.</code></pre>
+
+    <h3>Английский (пример)</h3>
+    <pre><code>1. IT (Information Technology) — Field of technology related to the use of computers, networks, software, and data.
+35. Firewall — System that filters network traffic.
+38. IP Address (Internet Protocol Address) — Logical address assigned to a network device.</code></pre>
+
+    <h3>Пояснения</h3>
+    <ul>
+      <li>Бот ищет точную подстроку запроса (без учёта регистра).</li>
+      <li>Он выдаёт контекст только первого вхождения термина в каждом файле (~300 символов вокруг него).</li>
+      <li>Если точного совпадения нет — будут подсказки похожих слов (автокоррекция).</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Рекомендации по оформлению файлов</h2>
+    <ul>
+      <li>Сохраняйте файлы в UTF-8.</li>
+      <li>Пишите термин один раз в явном виде (например: <code>Firewall — система фильтрации</code>).</li>
+      <li>Разделяйте абзацы и ставьте точки — тогда контекст будет обрезаться корректно по предложениям.</li>
+      <li>Для HTML используйте простые теги (&lt;p&gt;, &lt;h1&gt;) — бот извлекает видимый текст.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>DEMO notice</h2>
+    <p>Это демонстрационная версия. В продакшне рекомендуем: регулярные бэкапы папки <code>knowledge_base</code>, проверку кодировки и единообразие терминологии (термин должен появляться только один раз в файлах).</p>
+  </section>
+
+  <footer style="margin-top:18px;color:#666;font-size:0.9em">Файл: docs/user_manual_chat_ru.html — создано автоматически. Нужно добавить локализацию EN/HE? Я уже создам.</footer>
+</body>
+</html>

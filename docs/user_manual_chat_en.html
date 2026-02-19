@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>School Auto Chat — User Manual (DEMO)</title>
+  <style>body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#111;padding:20px}header{background:#0b5ea8;color:#fff;padding:16px;border-radius:6px}section{border:1px solid #e6e6e6;padding:16px;border-radius:6px;margin-top:12px}pre{background:#f4f6fb;padding:12px;border-radius:6px;overflow:auto}</style>
+</head>
+<body>
+  <header>
+    <h1>School Auto Chat — User Manual (DEMO)</h1>
+    <p>This is a demo version. Run locally using <strong>run.bat</strong>.</p>
+  </header>
+
+  <section>
+    <h2>Overview</h2>
+    <p>Standard chat with an integrated TeacherBot that searches local files inside the <code>knowledge_base</code> folder (TXT/HTML). The bot returns the context of the <strong>first</strong> occurrence of the search term in each file. Recommendation: keep each term present only once in the files to get predictable results.</p>
+  </section>
+
+  <section>
+    <h2>Run (Windows)</h2>
+    <pre><code>run.bat</code></pre>
+    <p>When Windows asks to allow access through the firewall, choose <strong>Yes</strong> to open the port for local network clients.</p>
+  </section>
+
+  <section>
+    <h2>Examples (from your knowledge_base)</h2>
+    <pre><code>1. IT (Information Technology) — Field of technology related to the use of computers, networks, software, and data.
+35. Firewall — System that filters network traffic.
+38. IP Address (Internet Protocol Address) — Logical address assigned to a network device.</code></pre>
+    <p>These snippets are pulled directly from the files in <code>knowledge_base</code> and show how terms are written for best search results.</p>
+  </section>
+
+  <section>
+    <h2>Search behavior</h2>
+    <ul>
+      <li>Search is case-insensitive substring match.</li>
+      <li>Only the first occurrence in a file is returned (context ~300 chars).</li>
+      <li>If no exact match, the bot suggests similar indexed words.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Formatting recommendations</h2>
+    <ul>
+      <li>Save files in UTF-8 encoding.</li>
+      <li>Write terms explicitly and once per file (e.g., <code>Firewall — System that filters network traffic.</code>).</li>
+      <li>Use sentences ending with periods to allow clean sentence-based context extraction.</li>
+      <li>HTML files: use simple tags (&lt;p&gt;, &lt;h1&gt;) — the bot extracts visible text.</li>
+    </ul>
+  </section>
+
+  <footer style="margin-top:18px;color:#666;font-size:0.9em">File: docs/user_manual_chat_en.html — demo user manual. Want me to commit and push these files?</footer>
+</body>
+</html>
