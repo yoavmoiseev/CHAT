@@ -3,42 +3,273 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>School Auto Chat — מדריך (DEMO)</title>
-  <style>body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#111;padding:20px}header{background:#0b5ea8;color:#fff;padding:16px;border-radius:6px}section{border:1px solid #e6e6e6;padding:16px;border-radius:6px;margin-top:12px}pre{background:#f4f6fb;padding:12px;border-radius:6px;overflow:auto;direction:rtl}</style>
+  <title>School Auto Chat — מדריך למשתמש</title>
+  <style>
+    :root{
+      --primary:#667eea;
+      --secondary:#764ba2;
+      --grad:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      --bg:#f7fafc;
+      --card:#fff;
+      --border:#e2e8f0;
+      --text:#2d3748;
+      --text2:#718096;
+      --green:#48bb78;
+      --red:#f56565;
+      --code-bg:#f0f4ff;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Arial Hebrew',Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.75;direction:rtl}
+    a{color:var(--primary);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .hero{background:var(--grad);color:#fff;padding:48px 32px 40px;text-align:center}
+    .hero h1{font-size:2.2rem;font-weight:700;margin-bottom:10px}
+    .hero p{font-size:1.1rem;opacity:.9;max-width:620px;margin:0 auto}
+    .lang-bar{background:rgba(255,255,255,.15);display:flex;justify-content:center;gap:8px;padding:10px 32px}
+    .lang-bar a{color:#fff;font-size:.9rem;padding:4px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.4);transition:.2s}
+    .lang-bar a:hover,.lang-bar a.active{background:rgba(255,255,255,.3);text-decoration:none}
+    .container{max-width:900px;margin:0 auto;padding:32px 20px}
+    .toc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px 28px;margin-bottom:32px;box-shadow:0 2px 8px rgba(102,126,234,.08)}
+    .toc h2{font-size:1rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);margin-bottom:14px}
+    .toc ol{padding-right:20px;padding-left:0}
+    .toc li{margin:5px 0;font-size:.97rem}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px 32px;margin-bottom:24px;box-shadow:0 2px 8px rgba(102,126,234,.06)}
+    .card h2{font-size:1.35rem;font-weight:700;color:var(--primary);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+    .card h3{font-size:1.05rem;font-weight:600;margin:18px 0 8px}
+    .card p{margin-bottom:10px}
+    .card ul,.card ol{padding-right:22px;padding-left:0;margin-bottom:10px}
+    .card li{margin:5px 0}
+    .steps{counter-reset:step;list-style:none;padding:0}
+    .steps li{counter-increment:step;display:flex;gap:14px;margin-bottom:14px;align-items:flex-start;flex-direction:row-reverse}
+    .steps li::after{content:counter(step);background:var(--grad);color:#fff;width:28px;height:28px;min-width:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;margin-top:1px}
+    code{background:var(--code-bg);color:#5a32a3;padding:2px 7px;border-radius:5px;font-size:.9em;font-family:'Courier New',monospace;direction:ltr;display:inline-block}
+    pre{background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:16px 20px;overflow-x:auto;font-size:.9rem;font-family:'Courier New',monospace;color:#3d2b6e;margin:10px 0;direction:ltr;text-align:left}
+    .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.8rem;font-weight:600;margin-left:4px}
+    .badge-blue{background:#ebf4ff;color:#2b6cb0}
+    .badge-green{background:#f0fff4;color:#276749}
+    .badge-purple{background:#faf5ff;color:#6b46c1}
+    .tip{background:#f0fff4;border-right:4px solid var(--green);border-left:none;padding:12px 16px;border-radius:8px 0 0 8px;margin:12px 0;font-size:.95rem}
+    .warn{background:#fffaf0;border-right:4px solid #ed8936;border-left:none;padding:12px 16px;border-radius:8px 0 0 8px;margin:12px 0;font-size:.95rem}
+    .info{background:#ebf8ff;border-right:4px solid var(--primary);border-left:none;padding:12px 16px;border-radius:8px 0 0 8px;margin:12px 0;font-size:.95rem}
+    table{width:100%;border-collapse:collapse;margin:12px 0}
+    th{background:var(--grad);color:#fff;padding:10px 14px;text-align:right;font-size:.9rem}
+    td{padding:9px 14px;border-bottom:1px solid var(--border);font-size:.93rem;text-align:right}
+    tr:hover td{background:#f9fafb}
+    footer{text-align:center;padding:32px 20px;color:var(--text2);font-size:.88rem;border-top:1px solid var(--border);margin-top:8px}
+  </style>
 </head>
 <body>
-  <header>
-    <h1>School Auto Chat — מדריך (DEMO)</h1>
-    <p>זו גרסת הדמו. יש להריץ מקומית באמצעות <strong>run.bat</strong>.</p>
-  </header>
 
-  <section>
-    <h2>סקירה כללית</h2>
-    <p>צ׳אט רגיל עם TeacherBot המשולב שמחפש קבצים מקומיים בתיקייה <code>knowledge_base</code> (TXT/HTML). הבוט מחזיר את ההקשר של המופע הראשון של הכרך בכל קובץ. המלצה: יש להכניס כל מונח פעם אחת בלבד בקבצים כדי לקבל תוצאות צפויות.</p>
-  </section>
+<div class="hero">
+  <h1>🎓 School Auto Chat</h1>
+  <p>מדריך למשתמש &mdash; צ'אט כיתתי אופליין עם ТichерBot חכם</p>
+</div>
+<div class="lang-bar">
+  <a href="user_manual_chat_en.html">🇬🇧 English</a>
+  <a href="user_manual_chat_ru.html">🇷🇺 Русский</a>
+  <a href="user_manual_chat_he.html" class="active">🇮🇱 עברית</a>
+</div>
 
-  <section>
-    <h2>הפעלה (Windows)</h2>
-    <pre><code>run.bat</code></pre>
-    <p>כאשר Windows יבקש לאפשר גישה דרך חומת האש, יש ללחוץ <strong>Yes / Allow</strong> כדי לפתוח את היציאה לרשת מקומית.</p>
-  </section>
+<div class="container">
 
-  <section>
-    <h2>דוגמאות (מה-knowledge_base)</h2>
-    <pre><code>1. IT (טכנולוגיית מידע) — תחום טכנולוגי העוסק בשימוש במחשבים, רשתות, תוכנה ונתונים.
-35. Firewall (חומת אש) — מערכת לסינון תעבורת רשת.
-38. IP Address (כתובת IP) — כתובת לוגית של התקן ברשת.</code></pre>
-  </section>
+  <!-- TOC -->
+  <div class="toc">
+    <h2>📋 תוכן עניינים</h2>
+    <ol>
+      <li><a href="#overview">מה זה School Auto Chat?</a></li>
+      <li><a href="#teacher-start">התחלה מהירה: מורה</a></li>
+      <li><a href="#student-start">התחלה מהירה: תלמיד</a></li>
+      <li><a href="#chat-features">תכונות הצ'אט</a></li>
+      <li><a href="#teacherbot">מדריך TeacherBot</a></li>
+      <li><a href="#admin">כלי ניהול ומנהל</a></li>
+      <li><a href="#offline">גרסה אופליין (USB / רשת)</a></li>
+      <li><a href="#knowledge-base">פורמט בסיס הידע</a></li>
+      <li><a href="#troubleshooting">פתרון בעיות</a></li>
+    </ol>
+  </div>
 
-  <section>
-    <h2>אופן החיפוש</h2>
+  <!-- 1. OVERVIEW -->
+  <div class="card" id="overview">
+    <h2>📚 מה זה School Auto Chat?</h2>
+    <p>School Auto Chat הוא <strong>פלטפורמת תקשורת כיתתית אופליין</strong> מלאה. הוא רץ על המחשב של המורה, והתלמידים מתחברים דרך הדפדפן ברשת המקומית (Wi-Fi או כבל) &mdash; ללא אינטרנט וללא צורך בהתקנה.</p>
+    <table>
+      <tr><th>תכונה</th><th>פירוט</th></tr>
+      <tr><td>💬 צ'אט בזמן אמת</td><td>צ'אט ציבורי של הכיתה, גלוי לכולם</td></tr>
+      <tr><td>🔒 הודעות פרטיות</td><td>שליחת הודעה לאדם ספציפי</td></tr>
+      <tr><td>🤖 TeacherBot</td><td>בוט חכם שמחפש בקבצי בסיס הידע המקומי</td></tr>
+      <tr><td>👨‍🏫 תפקיד מנהל</td><td>המורה מקבל כלי פיקוח מלאים</td></tr>
+      <tr><td>🌐 עובד אופליין</td><td>לא נדרש אינטרנט בשום שלב</td></tr>
+      <tr><td>📱 עיצוב רספונסיבי</td><td>עובד על מחשבים ניידים, טאבלטים וטלפונים</td></tr>
+    </table>
+  </div>
+
+  <!-- 2. TEACHER -->
+  <div class="card" id="teacher-start">
+    <h2>🚀 התחלה מהירה: מורה</h2>
+
+    <h3>גרסה מקוונת (Python מותקן)</h3>
+    <ol class="steps">
+      <li><div>פתח את תיקיית <code>Chat</code> במחשב.</div></li>
+      <li><div>לחץ פעמיים על <strong>run.bat</strong> — השרת יתחיל. בחלון הקונסול יופיע הכתובת.</div></li>
+      <li><div>פתח דפדפן וגלוש אל <code>http://localhost:5000</code>.</div></li>
+      <li><div>הירשם עם <strong>כל שם משתמש</strong> וה<strong>סיסמת מנהל</strong> (ברירת מחדל: <code>teacher123</code>, מוגדרת ב-<code>server.py</code>). תקבל אוטומטית הרשאות מנהל.</div></li>
+      <li><div>שתף עם התלמידים את <strong>כתובת ה-IP המקומית</strong> שלך (מוצגת בקונסול, לדוגמה: <code>http://192.168.1.5:5000</code>).</div></li>
+    </ol>
+
+    <div class="tip">✅ <strong>טיפ:</strong> כאשר חומת האש של Windows תשאל — לחץ <em>אפשר גישה</em>. זה הכרחי לחיבור התלמידים.</div>
+
+    <h3>גרסה אופליין (ללא Python)</h3>
+    <ol class="steps">
+      <li><div>חלץ את <strong>ChatApp-Offline.zip</strong> לכל תיקייה (USB, שולחן עבודה וכו').</div></li>
+      <li><div>לחץ פעמיים על <strong>START_CHAT.bat</strong>. הדפדפן יפתח אוטומטית.</div></li>
+      <li><div>בקונסול תופיע כתובת הרשת — שתף אותה עם התלמידים.</div></li>
+    </ol>
+    <div class="info">ℹ️ הגרסה האופליין כוללת Python 3.11 וכל התלויות. אין צורך להתקין דבר.</div>
+  </div>
+
+  <!-- 3. STUDENT -->
+  <div class="card" id="student-start">
+    <h2>🎒 התחלה מהירה: תלמיד</h2>
+    <ol class="steps">
+      <li><div>ודא שאתה מחובר ל<strong>אותה רשת Wi-Fi או LAN</strong> כמו מחשב המורה.</div></li>
+      <li><div>פתח כל דפדפן והקלד את הכתובת שהמורה נתן, לדוגמה: <code>http://192.168.1.5:5000</code>.</div></li>
+      <li><div>הכנס את <strong>שמך</strong> (או שם המשתמש הרשום) וה<strong>סיסמה</strong>.</div></li>
+      <li><div>אתה בצ'אט הכיתה! כתוב הודעה בתחתית ולחץ <strong>Enter</strong> או כפתור השליחה.</div></li>
+    </ol>
+    <div class="warn">⚠️ אין צורך להתקין כלום. כל דפדפן רגיל מתאים (Chrome, Firefox, Edge).</div>
+  </div>
+
+  <!-- 4. CHAT -->
+  <div class="card" id="chat-features">
+    <h2>💬 תכונות הצ'אט</h2>
+
+    <h3>צ'אט ציבורי</h3>
+    <p>כתוב הודעה בשדה הטקסט התחתון ולחץ <strong>Enter</strong>. כל המשתתפים יראו אותה.</p>
+
+    <h3>הודעות פרטיות</h3>
+    <p>לחץ על שם משתמש ברשימת <strong>המשתמשים המחוברים</strong> בצד ימין — כתוב הודעה. רק אותו אדם יקבל אותה.</p>
+
+    <h3>התראות</h3>
+    <p>כאשר תקבל הודעה פרטית, תופיע תגית על שם השולח. כותרת לשונית הדפדפן תתעדכן גם כן.</p>
+
+    <h3>היסטוריית הודעות</h3>
+    <p>עם הכניסה מוצגות 50 ההודעות האחרונות (ניתן לשינוי ב-<code>server.py</code>).</p>
+  </div>
+
+  <!-- 5. TEACHERBOT -->
+  <div class="card" id="teacherbot">
+    <h2>🤖 מדריך TeacherBot</h2>
+    <p>TeacherBot מחפש בקבצי <code>knowledge_base/</code> ומחזיר את הקטע הרלוונטי. שלח הודעה שמתחילה ב-<code>@bot</code>:</p>
+
+    <pre>@bot חומת אש
+@bot כתובת IP
+@bot זיכרון RAM</pre>
+
+    <p>הבוט יענה בצ'אט הציבורי עם ההגדרה או הקטע שנמצא בבסיס הידע.</p>
+
+    <h3>איך עובד החיפוש</h3>
+    <table>
+      <tr><th>פרמטר</th><th>פירוט</th></tr>
+      <tr><td>רגישות לאותיות</td><td>אין תלות — firewall = Firewall = FIREWALL</td></tr>
+      <tr><td>סוג התאמה</td><td>חיפוש תת-מחרוזת — ימצא את המונח בכל הקשר</td></tr>
+      <tr><td>תוצאה</td><td>כ-300 תווים סביב המופע הראשון</td></tr>
+      <tr><td>אין התאמה</td><td>הבוט מציע מונחים דומים מהבסיס</td></tr>
+      <tr><td>קבצים מרובים</td><td>חיפוש בכל קבצי .txt ו-.html בתיקיית knowledge_base/</td></tr>
+    </table>
+
+    <h3>דוגמת אינטראקציה</h3>
+    <pre>תלמיד: @bot פרוטוקול
+TeacherBot: נמצא ב-IT_Glossary.txt:
+  "פרוטוקול — מערכת כללים המסדירה את התקשורת
+   בין התקנים ברשת. דוגמאות: TCP/IP, HTTP, FTP."</pre>
+
+    <div class="tip">✅ <strong>המלצה:</strong> כתוב כל מונח <em>פעם אחת</em> בקובץ. אם מונח מופיע מספר פעמים, רק המופע הראשון יוחזר.</div>
+  </div>
+
+  <!-- 6. ADMIN -->
+  <div class="card" id="admin">
+    <h2>👨‍🏫 כלי ניהול ומנהל</h2>
+    <p>למנהל יש כלי פיקוח נוספים:</p>
+    <table>
+      <tr><th>פעולה</th><th>איך להשתמש</th></tr>
+      <tr><td>🚫 חסימת משתמש</td><td>לחץ על שם ← בחר חסום. המשתמש לא יוכל לשלוח הודעות.</td></tr>
+      <tr><td>✅ ביטול חסימה</td><td>לחץ על שם חסום ← בטל חסימה.</td></tr>
+      <tr><td>🗑️ מחיקת חשבון</td><td>לחץ על שם ← מחק. החשבון יימחק לצמיתות.</td></tr>
+      <tr><td>📢 הודעות שידור</td><td>הודעות ממנהל מודגשות בצ'אט.</td></tr>
+    </table>
+    <div class="warn">⚠️ קיים מנהל אחד בלבד לשרת. הסיסמה מוגדרת ב-<code>server.py</code> לפני ההפעלה.</div>
+  </div>
+
+  <!-- 7. OFFLINE -->
+  <div class="card" id="offline">
+    <h2>💾 גרסה אופליין (USB / רשת)</h2>
+    <p>החבילה <strong>ChatApp-Offline.zip</strong> עצמאית לחלוטין: Python, Flask וכל התלויות כלולות. אינטרנט והתקנה אינם נדרשים.</p>
+
+    <h3>מבנה ה-ZIP</h3>
+    <pre>ChatApp-Offline/
+├── START_CHAT.bat       ← לחץ פעמיים להפעלה
+├── launcher_offline.py  ← מזהה פורט ופותח דפדפן
+├── server.py            ← שרת הצ'אט הראשי
+├── python/              ← Python 3.11 מוטמע
+├── static/              ← CSS, JS, תמונות
+├── templates/           ← תבניות HTML
+└── knowledge_base/      ← קבצי .txt / .html שלך</pre>
+
+    <h3>הוראות</h3>
+    <ol class="steps">
+      <li><div>חלץ את <code>ChatApp-Offline.zip</code> לכל תיקייה מקומית או USB.</div></li>
+      <li><div>לחץ פעמיים על <strong>START_CHAT.bat</strong>.</div></li>
+      <li><div>הדפדפן יפתח אוטומטית ב-<code>http://localhost:5002</code>.</div></li>
+      <li><div>בקונסול תופיע גם כתובת הרשת — שתף עם התלמידים.</div></li>
+    </ol>
+
+    <div class="info">ℹ️ ה-launcher מנסה אוטומטית פורטים 5002, 5003, 5001, 8000, 8888, 5000 עד שנמצא פורט פנוי.</div>
+    <div class="warn">⚠️ אל תזיז ואל תשנה שמות קבצים בתיקייה המחולצת. השרת משתמש בנתיבים יחסיים.</div>
+  </div>
+
+  <!-- 8. KNOWLEDGE BASE -->
+  <div class="card" id="knowledge-base">
+    <h2>📝 פורמט בסיס הידע</h2>
+    <p>מקם קבצי <code>.txt</code> או <code>.html</code> בתיקיית <code>knowledge_base/</code>. TeacherBot קורא אותם בעת ההפעלה.</p>
+
+    <h3>פורמט TXT (מומלץ)</h3>
+    <pre>1. RAM (זיכרון אקראי) — זיכרון זמני של המחשב המשמש בזמן הפעלת תוכניות.
+2. מעבד (CPU) — הרכיב המרכזי המבצע הוראות תוכניות.
+3. חומת אש — מערכת אבטחת רשת השולטת בתעבורה נכנסת ויוצאת.</pre>
+
+    <h3>פורמט HTML</h3>
+    <p>השתמש בתגיות פשוטות בלבד. הבוט מחלץ טקסט גלוי, מתעלם מ-CSS וסקריפטים.</p>
+    <pre>&lt;p&gt;חומת אש — מערכת לסינון תעבורת רשת.&lt;/p&gt;
+&lt;p&gt;כתובת IP — כתובת לוגית של התקן ברשת.&lt;/p&gt;</pre>
+
+    <h3>המלצות</h3>
     <ul>
-      <li>חיפוש הוא חיפוש תת-מחרוזת ללא תלות באותיות גדולות/קטנות.</li>
-      <li>הבוט מחזיר רק את המופע הראשון בקובץ (כ־300 תווים מסביב).</li>
-      <li>אם אין התאמה מדויקת — מוצגות הצעות למונחים דומים.</li>
+      <li>שמור קבצים בקידוד <strong>UTF-8</strong> (חיוני לתווי עברית).</li>
+      <li>כתוב כל מונח <strong>פעם אחת בקובץ</strong>.</li>
+      <li>השתמש בפורמט <code>מונח — הגדרה.</code></li>
+      <li>סיים משפטים בנקודה לתוצאת הקשר נקייה.</li>
     </ul>
-  </section>
+  </div>
 
-  <footer style="margin-top:18px;color:#666;font-size:0.9em">File: docs/user_manual_chat_he.html — גרסת דמו. אפשר גם להכין גרסאות נוספות או לבצען commit.</footer>
+  <!-- 9. TROUBLESHOOTING -->
+  <div class="card" id="troubleshooting">
+    <h2>🔧 פתרון בעיות</h2>
+    <table>
+      <tr><th>בעיה</th><th>פתרון</th></tr>
+      <tr><td>תלמידים לא יכולים להתחבר</td><td>ודא שחומת האש של Windows אפשרה גישה לשרת. כל המכשירים חייבים להיות באותה רשת. נסה <code>ping &lt;IP המורה&gt;</code> ממכשיר תלמיד.</td></tr>
+      <tr><td>הדפדפן לא נפתח אוטומטית</td><td>פתח ידנית: <code>http://localhost:5002</code> (אופליין) או <code>http://localhost:5000</code> (מקוון).</td></tr>
+      <tr><td>השרת עולה אך יש שגיאות</td><td>בדוק את חלון הקונסול. הסיבה הנפוצה: פורט תפוס. ה-launcher ימצא פורט פנוי אוטומטית.</td></tr>
+      <tr><td>TeacherBot מחזיר "לא נמצא"</td><td>ודא שבתיקיית <code>knowledge_base/</code> יש קבצי .txt או .html שמורים ב-UTF-8.</td></tr>
+      <tr><td>תווים פגומים / בעיות קידוד</td><td>שמור מחדש את קבצי בסיס הידע ב-UTF-8 (ללא BOM עבור .txt).</td></tr>
+      <tr><td>לא ניתן להתחבר — סיסמה שגויה</td><td>המשתמשים שמורים ב-<code>users_db.json</code>. בקש מהמנהל למחוק וליצור מחדש את החשבון.</td></tr>
+    </table>
+  </div>
+
+</div><!-- /container -->
+
+<footer>
+  School Auto Chat &mdash; מדריך למשתמש (עברית) &bull; <a href="user_manual_chat_en.html">English</a> &bull; <a href="user_manual_chat_ru.html">Русский</a>
+</footer>
+
 </body>
 </html>

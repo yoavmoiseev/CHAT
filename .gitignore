@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+venv/
+.venv/
+
+# Build artifacts (large files)
+ChatApp-Offline/
+python-3.11.9-embed-amd64.zip
+get-pip.py
+
+# IDE
+.vscode/
+.idea/

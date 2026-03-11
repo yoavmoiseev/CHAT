@@ -1,7 +1,14 @@
-from flask import Flask, render_template, request
-from flask_socketio import SocketIO, emit, join_room, leave_room
 import os
 import sys
+# Ensure the directory containing this script is always in sys.path
+# (needed for Python embeddable package which doesn't add it automatically)
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+if _SCRIPT_DIR not in sys.path:
+    sys.path.insert(0, _SCRIPT_DIR)
+os.chdir(_SCRIPT_DIR)
+
+from flask import Flask, render_template, request
+from flask_socketio import SocketIO, emit, join_room, leave_room
 import json
 import socket
 from datetime import datetime
@@ -461,4 +468,5 @@ if __name__ == '__main__':
     print(f'  Network: http://<your-ip>:{port}')
     print('=' * 50)
 
-    socketio.run(app, host='0.0.0.0', port=port, debug=True)
+    debug_mode = os.environ.get('FLASK_DEBUG', '0') == '1'
+    socketio.run(app, host='0.0.0.0', port=port, debug=debug_mode, allow_unsafe_werkzeug=True)

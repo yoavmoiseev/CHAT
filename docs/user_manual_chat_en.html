@@ -3,53 +3,307 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>School Auto Chat — User Manual (DEMO)</title>
-  <style>body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#111;padding:20px}header{background:#0b5ea8;color:#fff;padding:16px;border-radius:6px}section{border:1px solid #e6e6e6;padding:16px;border-radius:6px;margin-top:12px}pre{background:#f4f6fb;padding:12px;border-radius:6px;overflow:auto}</style>
+  <title>School Auto Chat — User Manual</title>
+  <style>
+    :root{
+      --primary:#667eea;
+      --secondary:#764ba2;
+      --grad:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      --bg:#f7fafc;
+      --card:#fff;
+      --border:#e2e8f0;
+      --text:#2d3748;
+      --text2:#718096;
+      --green:#48bb78;
+      --red:#f56565;
+      --code-bg:#f0f4ff;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.65}
+    a{color:var(--primary);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    /* HEADER */
+    .hero{background:var(--grad);color:#fff;padding:48px 32px 40px;text-align:center}
+    .hero h1{font-size:2.2rem;font-weight:700;margin-bottom:10px;letter-spacing:-0.5px}
+    .hero p{font-size:1.1rem;opacity:.9;max-width:620px;margin:0 auto}
+    .lang-bar{background:rgba(255,255,255,.15);display:flex;justify-content:center;gap:8px;padding:10px 32px}
+    .lang-bar a{color:#fff;font-size:.9rem;padding:4px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.4);transition:.2s}
+    .lang-bar a:hover,.lang-bar a.active{background:rgba(255,255,255,.3);text-decoration:none}
+
+    /* NAV */
+    .container{max-width:900px;margin:0 auto;padding:32px 20px}
+    .toc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px 28px;margin-bottom:32px;box-shadow:0 2px 8px rgba(102,126,234,.08)}
+    .toc h2{font-size:1rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:14px}
+    .toc ol{padding-left:20px}
+    .toc li{margin:5px 0;font-size:.97rem}
+
+    /* SECTIONS */
+    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px 32px;margin-bottom:24px;box-shadow:0 2px 8px rgba(102,126,234,.06)}
+    .card h2{font-size:1.35rem;font-weight:700;color:var(--primary);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+    .card h3{font-size:1.05rem;font-weight:600;margin:18px 0 8px;color:var(--text)}
+    .card p{margin-bottom:10px;color:var(--text)}
+    .card ul,.card ol{padding-left:22px;margin-bottom:10px}
+    .card li{margin:5px 0}
+
+    /* STEPS */
+    .steps{counter-reset:step;list-style:none;padding:0}
+    .steps li{counter-increment:step;display:flex;gap:14px;margin-bottom:14px;align-items:flex-start}
+    .steps li::before{content:counter(step);background:var(--grad);color:#fff;width:28px;height:28px;min-width:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;margin-top:1px}
+
+    /* CODE */
+    code{background:var(--code-bg);color:#5a32a3;padding:2px 7px;border-radius:5px;font-size:.9em;font-family:'Courier New',monospace}
+    pre{background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:16px 20px;overflow-x:auto;font-size:.9rem;font-family:'Courier New',monospace;color:#3d2b6e;margin:10px 0}
+
+    /* BADGES */
+    .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.8rem;font-weight:600;margin-right:4px}
+    .badge-blue{background:#ebf4ff;color:#2b6cb0}
+    .badge-green{background:#f0fff4;color:#276749}
+    .badge-purple{background:#faf5ff;color:#6b46c1}
+    .badge-red{background:#fff5f5;color:#9b2c2c}
+
+    /* TIPS */
+    .tip{background:#f0fff4;border-left:4px solid var(--green);padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:.95rem}
+    .warn{background:#fffaf0;border-left:4px solid #ed8936;padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:.95rem}
+    .info{background:#ebf8ff;border-left:4px solid var(--primary);padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:.95rem}
+
+    /* TABLE */
+    table{width:100%;border-collapse:collapse;margin:12px 0}
+    th{background:var(--grad);color:#fff;padding:10px 14px;text-align:left;font-size:.9rem}
+    td{padding:9px 14px;border-bottom:1px solid var(--border);font-size:.93rem}
+    tr:hover td{background:#f9fafb}
+
+    /* FOOTER */
+    footer{text-align:center;padding:32px 20px;color:var(--text2);font-size:.88rem;border-top:1px solid var(--border);margin-top:8px}
+  </style>
 </head>
 <body>
-  <header>
-    <h1>School Auto Chat — User Manual (DEMO)</h1>
-    <p>This is a demo version. Run locally using <strong>run.bat</strong>.</p>
-  </header>
 
-  <section>
-    <h2>Overview</h2>
-    <p>Standard chat with an integrated TeacherBot that searches local files inside the <code>knowledge_base</code> folder (TXT/HTML). The bot returns the context of the <strong>first</strong> occurrence of the search term in each file. Recommendation: keep each term present only once in the files to get predictable results.</p>
-  </section>
+<div class="hero">
+  <h1>🎓 School Auto Chat</h1>
+  <p>User Manual &mdash; Offline classroom chat with AI-powered TeacherBot</p>
+</div>
+<div class="lang-bar">
+  <a href="user_manual_chat_en.html" class="active">🇬🇧 English</a>
+  <a href="user_manual_chat_ru.html">🇷🇺 Русский</a>
+  <a href="user_manual_chat_he.html">🇮🇱 עברית</a>
+</div>
 
-  <section>
-    <h2>Run (Windows)</h2>
-    <pre><code>run.bat</code></pre>
-    <p>When Windows asks to allow access through the firewall, choose <strong>Yes</strong> to open the port for local network clients.</p>
-  </section>
+<div class="container">
 
-  <section>
-    <h2>Examples (from your knowledge_base)</h2>
-    <pre><code>1. IT (Information Technology) — Field of technology related to the use of computers, networks, software, and data.
-35. Firewall — System that filters network traffic.
-38. IP Address (Internet Protocol Address) — Logical address assigned to a network device.</code></pre>
-    <p>These snippets are pulled directly from the files in <code>knowledge_base</code> and show how terms are written for best search results.</p>
-  </section>
+  <!-- TOC -->
+  <div class="toc">
+    <h2>📋 Table of Contents</h2>
+    <ol>
+      <li><a href="#overview">What is School Auto Chat?</a></li>
+      <li><a href="#teacher-start">Teacher Quick Start</a></li>
+      <li><a href="#student-start">Student Quick Start</a></li>
+      <li><a href="#chat-features">Chat Features</a></li>
+      <li><a href="#teacherbot">TeacherBot Guide</a></li>
+      <li><a href="#admin">Admin / Teacher Controls</a></li>
+      <li><a href="#offline">Offline Version (USB / LAN)</a></li>
+      <li><a href="#knowledge-base">Knowledge Base Format</a></li>
+      <li><a href="#troubleshooting">Troubleshooting</a></li>
+    </ol>
+  </div>
 
-  <section>
-    <h2>Search behavior</h2>
+  <!-- 1. OVERVIEW -->
+  <div class="card" id="overview">
+    <h2>📚 What is School Auto Chat?</h2>
+    <p>School Auto Chat is a <strong>fully offline classroom communication platform</strong>. It runs on the teacher's computer and everyone on the same local network (Wi-Fi or LAN cable) joins from their browser &mdash; no internet required, no installation needed for students.</p>
+    <table>
+      <tr><th>Feature</th><th>Details</th></tr>
+      <tr><td>💬 Real-time chat</td><td>Public classroom chat visible to everyone</td></tr>
+      <tr><td>🔒 Private messages</td><td>Send a message to one specific person</td></tr>
+      <tr><td>🤖 TeacherBot</td><td>AI-style bot that searches your local knowledge base files</td></tr>
+      <tr><td>👨‍🏫 Admin role</td><td>Teacher gets full moderation controls</td></tr>
+      <tr><td>🌐 Works offline</td><td>No internet connection required at any time</td></tr>
+      <tr><td>📱 Responsive</td><td>Works on laptops, tablets, and phones</td></tr>
+    </table>
+  </div>
+
+  <!-- 2. TEACHER START -->
+  <div class="card" id="teacher-start">
+    <h2>🚀 Teacher Quick Start</h2>
+
+    <h3>Online version (Python installed)</h3>
+    <ol class="steps">
+      <li>
+        <div>Open the <code>Chat</code> folder on your computer.</div>
+      </li>
+      <li>
+        <div>Double-click <strong>run.bat</strong> &mdash; the server starts. You will see the local address in the console window.</div>
+      </li>
+      <li>
+        <div>Open your browser and go to <code>http://localhost:5000</code> (or the address shown in the console).</div>
+      </li>
+      <li>
+        <div>Register with <strong>any username</strong> and the <strong>admin password</strong> (set in <code>server.py</code>, default: <code>teacher123</code>). You will automatically become the admin.</div>
+      </li>
+      <li>
+        <div>Share your <strong>LAN IP address</strong> with students (shown in the console, e.g. <code>http://192.168.1.5:5000</code>).</div>
+      </li>
+    </ol>
+
+    <div class="tip">✅ <strong>Tip:</strong> When Windows Firewall asks, click <em>Allow access</em> &mdash; this is required for students to connect over the network.</div>
+
+    <h3>Offline version (no Python needed)</h3>
+    <ol class="steps">
+      <li><div>Extract <strong>ChatApp-Offline.zip</strong> to any folder (USB drive, Desktop, etc.).</div></li>
+      <li><div>Double-click <strong>START_CHAT.bat</strong>. A browser window opens automatically.</div></li>
+      <li><div>The console shows your LAN address &mdash; share it with students.</div></li>
+    </ol>
+    <div class="info">ℹ️ The offline version includes Python 3.11 and all dependencies. Nothing needs to be installed on the teacher's PC.</div>
+  </div>
+
+  <!-- 3. STUDENT START -->
+  <div class="card" id="student-start">
+    <h2>🎒 Student Quick Start</h2>
+    <ol class="steps">
+      <li><div>Connect to the <strong>same Wi-Fi or network</strong> as the teacher's computer.</div></li>
+      <li><div>Open any browser and type the address the teacher shared, e.g. <code>http://192.168.1.5:5000</code>.</div></li>
+      <li><div>Enter your <strong>name</strong> (or registered username) and a <strong>password</strong>. If you already registered, use the same credentials.</div></li>
+      <li><div>You are in the classroom chat! Type in the message box and press <strong>Enter</strong> or click Send.</div></li>
+    </ol>
+    <div class="warn">⚠️ You do NOT need to install anything. Just use your browser (Chrome, Firefox, Edge, Safari).</div>
+  </div>
+
+  <!-- 4. CHAT FEATURES -->
+  <div class="card" id="chat-features">
+    <h2>💬 Chat Features</h2>
+
+    <h3>Public chat</h3>
+    <p>Type your message in the bottom input field and press <strong>Enter</strong>. Everyone in the room sees it.</p>
+
+    <h3>Private message</h3>
+    <p>Click a username in the <strong>Online Users</strong> list on the right side, then type your message. Only that person receives it.</p>
+
+    <h3>Notifications</h3>
+    <p>When you receive a private message, a badge appears on the user's name in the sidebar. The browser title will also show a notification indicator.</p>
+
+    <h3>Online users list</h3>
+    <p>The right panel shows all currently connected users. Icons indicate regular users vs. admin.</p>
+
+    <h3>Message history</h3>
+    <p>Up to the last 50 messages are shown upon joining (configurable in server.py).</p>
+  </div>
+
+  <!-- 5. TEACHERBOT -->
+  <div class="card" id="teacherbot">
+    <h2>🤖 TeacherBot Guide</h2>
+    <p>TeacherBot searches your local <code>knowledge_base/</code> files and returns the relevant passage. Send a message starting with <code>@bot</code>:</p>
+
+    <pre>@bot Firewall
+@bot IP address
+@bot RAM</pre>
+
+    <p>The bot responds in the public chat with the definition or passage found in your knowledge base.</p>
+
+    <h3>How search works</h3>
+    <table>
+      <tr><th>Behavior</th><th>Details</th></tr>
+      <tr><td>Case</td><td>Case-insensitive (firewall = Firewall = FIREWALL)</td></tr>
+      <tr><td>Match type</td><td>Substring match &mdash; finds the term anywhere in a word or sentence</td></tr>
+      <tr><td>Result</td><td>Returns ~300 characters of context around the first match</td></tr>
+      <tr><td>No match</td><td>Bot suggests the closest indexed words</td></tr>
+      <tr><td>Multiple files</td><td>Searches all .txt and .html files in knowledge_base/</td></tr>
+    </table>
+
+    <h3>Example interaction</h3>
+    <pre>Student: @bot protocol
+TeacherBot: Found in IT_Glossary.txt:
+  "Protocol — A set of rules that governs the communication
+   between devices on a network. Examples: TCP/IP, HTTP, FTP."</pre>
+
+    <div class="tip">✅ <strong>Best practice:</strong> Write each term <em>once</em> per file. If a term appears multiple times, only the first occurrence is returned.</div>
+  </div>
+
+  <!-- 6. ADMIN -->
+  <div class="card" id="admin">
+    <h2>👨‍🏫 Admin / Teacher Controls</h2>
+    <p>The admin account has extra moderation tools visible in the UI:</p>
+    <table>
+      <tr><th>Action</th><th>How to use</th></tr>
+      <tr><td>🚫 Block user</td><td>Click a username &rarr; select Block. The user cannot send messages.</td></tr>
+      <tr><td>✅ Unblock user</td><td>Click blocked username &rarr; Unblock.</td></tr>
+      <tr><td>🗑️ Delete user</td><td>Click username &rarr; Delete. Removes the account permanently.</td></tr>
+      <tr><td>📢 Broadcast</td><td>All messages from admin are highlighted in the chat.</td></tr>
+    </table>
+    <div class="warn">⚠️ Only one admin account exists per server. The admin password is set in <code>server.py</code> before deployment.</div>
+    <div class="tip">✅ The admin role is identified by the password used during registration, not a separate account type.</div>
+  </div>
+
+  <!-- 7. OFFLINE -->
+  <div class="card" id="offline">
+    <h2>💾 Offline Version (USB / LAN)</h2>
+    <p>The offline package (<strong>ChatApp-Offline.zip</strong>) is fully self-contained: Python, Flask, and all dependencies are bundled inside. No internet and no installation required.</p>
+
+    <h3>Structure of the ZIP</h3>
+    <pre>ChatApp-Offline/
+├── START_CHAT.bat       ← double-click to start
+├── launcher_offline.py  ← auto-detects port and opens browser
+├── server.py            ← main chat server
+├── python/              ← embedded Python 3.11 runtime
+├── static/              ← CSS, JS, images
+├── templates/           ← HTML templates
+└── knowledge_base/      ← your .txt / .html resource files</pre>
+
+    <h3>Steps</h3>
+    <ol class="steps">
+      <li><div>Extract <code>ChatApp-Offline.zip</code> to a local folder or USB drive.</div></li>
+      <li><div>Double-click <strong>START_CHAT.bat</strong>.</div></li>
+      <li><div>A browser tab opens automatically at <code>http://localhost:5002</code>.</div></li>
+      <li><div>The console also shows your LAN address, e.g. <code>http://192.168.1.5:5002</code> &mdash; share it with students.</div></li>
+    </ol>
+
+    <div class="info">ℹ️ The launcher automatically tries ports 5002, 5003, 5001, 8000, 8888, 5000 until a free one is found.</div>
+    <div class="warn">⚠️ Do <strong>not</strong> move or rename files inside the ZIP after extraction. The server uses relative paths.</div>
+  </div>
+
+  <!-- 8. KNOWLEDGE BASE -->
+  <div class="card" id="knowledge-base">
+    <h2>📝 Knowledge Base Format</h2>
+    <p>Place <code>.txt</code> or <code>.html</code> files in the <code>knowledge_base/</code> folder. TeacherBot reads all of them at startup.</p>
+
+    <h3>TXT format (recommended)</h3>
+    <pre>1. RAM (Random Access Memory) — Temporary storage used by the computer while running programs.
+2. CPU (Central Processing Unit) — The main processor that executes program instructions.
+3. Firewall — A network security system that monitors and controls incoming and outgoing traffic.</pre>
+
+    <h3>HTML format</h3>
+    <p>Use simple tags only. The bot extracts visible text, ignoring CSS and scripts.</p>
+    <pre>&lt;p&gt;Firewall &mdash; A network security system that monitors traffic.&lt;/p&gt;
+&lt;p&gt;IP Address &mdash; A logical address assigned to a network device.&lt;/p&gt;</pre>
+
+    <h3>Best practices</h3>
     <ul>
-      <li>Search is case-insensitive substring match.</li>
-      <li>Only the first occurrence in a file is returned (context ~300 chars).</li>
-      <li>If no exact match, the bot suggests similar indexed words.</li>
+      <li>Save files in <strong>UTF-8</strong> encoding (important for non-Latin characters).</li>
+      <li>Write each term <strong>once per file</strong> for predictable results.</li>
+      <li>Use clear <code>Term — Definition.</code> format (dash or colon separator).</li>
+      <li>End sentences with periods for clean context extraction.</li>
+      <li>Avoid tables and complex HTML in .html knowledge base files.</li>
     </ul>
-  </section>
+  </div>
 
-  <section>
-    <h2>Formatting recommendations</h2>
-    <ul>
-      <li>Save files in UTF-8 encoding.</li>
-      <li>Write terms explicitly and once per file (e.g., <code>Firewall — System that filters network traffic.</code>).</li>
-      <li>Use sentences ending with periods to allow clean sentence-based context extraction.</li>
-      <li>HTML files: use simple tags (&lt;p&gt;, &lt;h1&gt;) — the bot extracts visible text.</li>
-    </ul>
-  </section>
+  <!-- 9. TROUBLESHOOTING -->
+  <div class="card" id="troubleshooting">
+    <h2>🔧 Troubleshooting</h2>
+    <table>
+      <tr><th>Problem</th><th>Solution</th></tr>
+      <tr><td>Students can't connect</td><td>Make sure Windows Firewall allowed the server. Check that devices are on the same network. Try <code>ping &lt;teacher-IP&gt;</code> from a student device.</td></tr>
+      <tr><td>Browser doesn't open automatically</td><td>Open it manually at <code>http://localhost:5002</code> (offline) or <code>http://localhost:5000</code> (online).</td></tr>
+      <tr><td>Server starts but shows errors</td><td>Check the console window for the error message. Most common: port already in use — the launcher will try the next available port automatically.</td></tr>
+      <tr><td>TeacherBot says "not found"</td><td>Check that the <code>knowledge_base/</code> folder contains .txt or .html files and they are saved in UTF-8.</td></tr>
+      <tr><td>Garbled text / encoding issues</td><td>Ensure all knowledge base files are saved as UTF-8 (no BOM recommended for .txt).</td></tr>
+      <tr><td>Can't log in — wrong password</td><td>Users are stored in <code>users_db.json</code>. Ask the admin to delete and re-create the account if the password was forgotten.</td></tr>
+    </table>
+  </div>
 
-  <footer style="margin-top:18px;color:#666;font-size:0.9em">File: docs/user_manual_chat_en.html — demo user manual. Want me to commit and push these files?</footer>
+</div><!-- /container -->
+
+<footer>
+  School Auto Chat &mdash; User Manual (English) &bull; <a href="user_manual_chat_ru.html">Русский</a> &bull; <a href="user_manual_chat_he.html">עברית</a>
+</footer>
+
 </body>
 </html>
