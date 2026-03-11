@@ -90,33 +90,63 @@ class TeacherBot:
                 self.terms_index[word] = []
             self.terms_index[word].append(doc)
     
-    def search(self, query):
+    # Localized UI strings for TeacherBot responses
+    MESSAGES = {
+        'en': {
+            'empty_kb':  "📚 Knowledge base is empty. Add TXT or HTML files to the 'knowledge_base' folder.",
+            'not_found': "🔍 Term '{term}' not found.\n\nMaybe you were looking for: {suggestions}?",
+            'no_info':   "❌ Unfortunately, information about '{term}' was not found in the knowledge base.\n\nTry rephrasing the question or check the spelling.",
+            'from_file': "📄 From file:",
+            'more':      "... and {n} more result(s)",
+            'no_result': "Information about '{term}' not found.",
+        },
+        'ru': {
+            'empty_kb':  "📚 База знаний пуста. Добавьте TXT или HTML файлы в папку 'knowledge_base'.",
+            'not_found': "🔍 Термин '{term}' не найден.\n\nВозможно, вы искали: {suggestions}?",
+            'no_info':   "❌ К сожалению, информация о '{term}' не найдена в базе знаний.\n\nПопробуйте переформулировать вопрос или проверьте правописание.",
+            'from_file': "📄 Из файла:",
+            'more':      "... и ещё {n} результат(ов)",
+            'no_result': "Информация о '{term}' не найдена.",
+        },
+        'he': {
+            'empty_kb':  "📚 בסיס הידע ריק. הוסף קבצי TXT או HTML לתיקייה 'knowledge_base'.",
+            'not_found': "🔍 המונח '{term}' לא נמצא.\n\nאולי התכוונת ל: {suggestions}?",
+            'no_info':   "❌ לצערנו, מידע על '{term}' לא נמצא בבסיס הידע.\n\nנסה לנסח מחדש את השאלה או בדוק את האיות.",
+            'from_file': "📄 מהקובץ:",
+            'more':      "... ועוד {n} תוצאה/תוצאות",
+            'no_result': "לא נמצא מידע על '{term}'.",
+        },
+    }
+
+    def search(self, query, lang='ru'):
         """
         Поиск ответа на запрос
         Возвращает текст с контекстом или сообщение об отсутствии информации
         """
+        msgs = self.MESSAGES.get(lang, self.MESSAGES['ru'])
+
         if not self.documents:
-            return "📚 База знаний пуста. Добавьте TXT или HTML файлы в папку 'knowledge_base'."
+            return msgs['empty_kb']
         
         query_lower = query.lower().strip()
         
         # Убираем вопросительные слова
-        query_clean = re.sub(r'^(что такое|что это|определение|define|explain|что)\s+', '', query_lower)
+        query_clean = re.sub(r'^(что такое|что это|определение|define|explain|что|מה זה|מהו|הגדרה)\s+', '', query_lower)
         query_clean = query_clean.replace('?', '').strip()
         
         # Поиск точных совпадений
         results = self._search_exact(query_clean)
         
         if results:
-            return self._format_results(results, query_clean)
+            return self._format_results(results, query_clean, msgs)
         
         # Поиск похожих терминов
         similar = self._find_similar_terms(query_clean)
         if similar:
             suggestions = ', '.join(similar[:5])
-            return f"🔍 Термин '{query_clean}' не найден.\n\nВозможно, вы искали: {suggestions}?"
+            return msgs['not_found'].format(term=query_clean, suggestions=suggestions)
         
-        return f"❌ К сожалению, информация о '{query_clean}' не найдена в базе знаний.\n\nПопробуйте переформулировать вопрос или проверьте правописание."
+        return msgs['no_info'].format(term=query_clean)
     
     def _search_exact(self, term):
         """Поиск точных совпадений термина"""
@@ -176,21 +206,23 @@ class TeacherBot:
         similar = get_close_matches(term, all_terms, n=5, cutoff=0.6)
         return similar
     
-    def _format_results(self, results, query):
+    def _format_results(self, results, query, msgs=None):
         """Форматирование результатов поиска"""
+        if msgs is None:
+            msgs = self.MESSAGES['ru']
         if not results:
-            return f"Информация о '{query}' не найдена."
+            return msgs['no_result'].format(term=query)
         
         response = f"📖 **{query.upper()}**\n\n"
         
         for i, result in enumerate(results[:3], 1):  # Максимум 3 результата
-            response += f"📄 Из файла: {result['filename']}\n"
+            response += f"{msgs['from_file']} {result['filename']}\n"
             response += f"{result['context']}\n\n"
             if i < len(results):
                 response += "---\n\n"
         
         if len(results) > 3:
-            response += f"\n... и ещё {len(results) - 3} результат(ов)"
+            response += f"\n{msgs['more'].format(n=len(results) - 3)}"
         
         return response.strip()
     

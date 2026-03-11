@@ -18,7 +18,7 @@ import socket as _socket
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'school-auto-chat-secret-key'
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 # Хранилище зарегистрированных пользователей
 USERS_FILE = 'users_db.json'
@@ -329,12 +329,13 @@ def handle_teacherbot_query(data):
         return
     
     query = data['query']
+    lang = data.get('lang', 'ru')
     username = users[sid]['username']
     
     print(f"TeacherBot query from {username}: {query}")
     
     # Поиск ответа через TeacherBot
-    response = teacher_bot.search(query)
+    response = teacher_bot.search(query, lang)
     
     # Отправка ответа пользователю
     bot_message = {

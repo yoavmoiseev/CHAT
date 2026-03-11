@@ -1,0 +1,103 @@
+Algebra — A branch of mathematics that uses symbols and letters to represent numbers and solve equations.
+Algorithm — A step-by-step set of instructions used to solve a problem or perform a task.
+Angle — The figure formed by two lines that meet at a point.
+Area — The amount of space inside a two-dimensional shape.
+Atom — The smallest unit of a chemical element that retains its properties.
+Average — The result obtained by adding several numbers and dividing the total by the number of values.
+Binary — A number system that uses only two digits: 0 and 1.
+Biology — The scientific study of living organisms.
+Byte — A unit of digital information that usually consists of 8 bits.
+Cell — The smallest structural and functional unit of a living organism.
+Chemical reaction — A process in which substances change into new substances.
+Chromosome — A structure in cells that carries genetic information (DNA).
+Circle — A round shape where all points are the same distance from the center.
+Climate — The long-term pattern of weather conditions in a region.
+Code — A system of symbols or instructions used in programming.
+Computer — An electronic device that processes and stores data.
+Constitution — A set of fundamental principles or laws that govern a country.
+Continent — One of the large landmasses of the Earth.
+Data — Information that is collected and processed.
+Database — An organized collection of data stored electronically.
+Decimal — A number system based on ten digits (0–9).
+Democracy — A system of government in which people have the power to vote.
+Density — The amount of mass in a given volume.
+Derivative — In calculus, the rate at which a function changes.
+Diameter — A straight line passing through the center of a circle connecting two points on the edge.
+DNA — The molecule that carries genetic instructions in living organisms.
+Ecosystem — A community of living organisms interacting with their environment.
+Electric current — The flow of electric charge through a conductor.
+Electricity — A form of energy resulting from charged particles.
+Element — A pure substance consisting of one type of atom.
+Energy — The ability to do work or cause change.
+Equation — A mathematical statement that two expressions are equal.
+Evaporation — The process of liquid turning into vapor.
+Evolution — The gradual change in species over time.
+Experiment — A scientific test carried out to discover or verify facts.
+Force — A push or pull acting on an object.
+Fraction — A number representing a part of a whole.
+Function — A relation where each input has exactly one output.
+Galaxy — A massive system of stars, gas, and dust held together by gravity.
+Gene — A unit of heredity that determines traits in organisms.
+Geometry — A branch of mathematics dealing with shapes, sizes, and space.
+Gravity — The force that attracts objects with mass toward each other.
+Hardware — The physical components of a computer.
+Hexadecimal — A number system based on sixteen symbols (0–9 and A–F).
+History — The study of past events.
+Hypothesis — A proposed explanation that can be tested through experiments.
+Input — Data entered into a computer system.
+Integer — A whole number that can be positive, negative, or zero.
+Internet — A global network connecting millions of computers.
+IP address — A unique number that identifies a device on a network.
+IT (Information Technology) — The use of computers and networks to process and store information.
+Keyboard — A device used to input text and commands into a computer.
+Kilometer — A unit of length equal to 1000 meters.
+Language — A system of communication using words and grammar.
+Latitude — The geographic coordinate measuring distance north or south of the equator.
+Longitude — The geographic coordinate measuring distance east or west of the prime meridian.
+Mass — The amount of matter in an object.
+Matter — Anything that has mass and occupies space.
+Mean — Another term for the average of a set of numbers.
+Memory — The part of a computer that stores data and instructions.
+Metaphor — A figure of speech comparing two different things.
+Meter — The basic unit of length in the metric system.
+Molecule — A group of atoms bonded together.
+Multiplication — A mathematical operation of repeated addition.
+Network — A group of connected computers or devices.
+Neuron — A nerve cell that transmits information in the nervous system.
+Noun — A word that represents a person, place, thing, or idea.
+Operating system — Software that manages computer hardware and software resources.
+Orbit — The curved path of an object around another object in space.
+Output — Data produced by a computer system.
+Oxygen — A chemical element essential for most forms of life.
+Paragraph — A group of sentences about a single topic.
+Password — A secret word or phrase used to access a system.
+Percentage — A number expressed as a fraction of 100.
+Perimeter — The total distance around a shape.
+Photosynthesis — The process by which plants make food using sunlight.
+Physics — The science that studies matter, energy, and forces.
+Planet — A large celestial body orbiting a star.
+Polygon — A closed figure with multiple straight sides.
+Population — The total number of people living in a particular area.
+Prime number — A number greater than 1 that has only two divisors: 1 and itself.
+Probability — The measure of how likely an event is to occur.
+Programming — The process of writing instructions for computers.
+RAM — Random Access Memory used by computers for temporary data storage.
+Rectangle — A four-sided shape with opposite sides equal and all angles 90 degrees.
+Radius — The distance from the center of a circle to its edge.
+Ratio — A comparison between two quantities.
+Science — The systematic study of the natural world.
+Server — A computer that provides services or data to other computers.
+Software — Programs and operating information used by a computer.
+Solar system — The Sun and all objects that orbit it.
+Square — A shape with four equal sides and four right angles.
+Statistics — The study of collecting and analyzing data.
+Subject — The main topic of a sentence or study.
+Temperature — A measure of how hot or cold something is.
+Theory — A well-tested explanation of natural phenomena.
+Triangle — A polygon with three sides.
+Variable — A symbol representing a value that can change.
+Velocity — Speed in a specific direction.
+Virus — A small infectious agent or a malicious computer program.
+Volume — The amount of space occupied by an object.
+Web browser — Software used to access and view websites.
+

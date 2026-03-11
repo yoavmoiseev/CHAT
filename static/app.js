@@ -491,7 +491,7 @@ function sendTeacherBotQuery() {
     addUserQueryToBot(query);
     
     // Отправляем запрос
-    socket.emit('teacherbot_query', { query });
+    socket.emit('teacherbot_query', { query, lang: currentLang });
     teacherbotInput.value = '';
 }
 
