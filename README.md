@@ -1,35 +1,36 @@
 # 🎓 School Auto Chat
 
-Офлайн чат для класса с встроенным TeacherBot для поиска учебных материалов.
+Offline classroom chat with a built-in TeacherBot for searching educational materials.
 
-## 🌟 Возможности
+## 🌟 Features
 
-- ✅ **Система регистрации и входа** - каждый пользователь со своим логином и паролем
-- ✅ **Реальное время** - мгновенный обмен сообщениями через WebSocket
-- 💬 **Публичный чат** - общение со всем классом
-- 🔒 **Приватные сообщения** - личные сообщения между учениками
-- 🤖 **TeacherBot** - умный бот для поиска информации в учебных материалах
-- 👑 **Роль администратора** - учитель (тот, кто запустил сервер) становится админом
-- 🎨 **Уникальные цвета** - у каждого пользователя свой цвет для юзернейма
-- 🌐 **Мультиязычность** - полная поддержка иврита (RTL), русского и английского
-- 📱 **Адаптивный дизайн** - работает на компьютерах и смартфонах
-- 🌐 **Полностью офлайн** - не требует интернета, работает в локальной сети
+* ✅ **Registration and login system** – each user has their own username and password
+* ✅ **Real-time messaging** – instant communication via WebSocket
+* 💬 **Public chat** – communicate with the entire class
+* 🔒 **Private messages** – direct messages between students
+* 🤖 **TeacherBot** – smart bot for searching information in study materials
+* 👑 **Administrator role** – the teacher (who started the server) becomes admin
+* 🎨 **Unique colors** – each user gets their own username color
+* 🌐 **Multilingual support** – full support for Hebrew (RTL), Russian, and English
+* 📱 **Responsive design** – works on computers and smartphones
+* 🌐 **Fully offline** – no internet required, works on a local network
 
-## 🚀 Быстрый старт
+## 🚀 Quick Start
 
-### Установка зависимостей
+### Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Запуск сервера
+### Run the server
 
 ```bash
 python server.py
 ```
 
-Сервер запустится на порту 5000. Вы увидите:
+The server will start on port 5000. You will see:
+
 ```
 School Auto Chat Server Starting...
 ==================================================
@@ -39,256 +40,246 @@ Server will be available at:
 ==================================================
 ```
 
-### Подключение учеников
+### Connecting students
 
-1. Узнайте IP-адрес компьютера с сервером:
-   - Windows: `ipconfig` в командной строке (ищите "IPv4 Address")
-   - Linux/Mac: `ifconfig` или `ip addr`
+1. Find the server computer's IP address:
 
-2. Ученики открывают браузер и переходят по адресу:
+   * Windows: `ipconfig` in command prompt (look for "IPv4 Address")
+   * Linux/Mac: `ifconfig` or `ip addr`
+
+2. Students open a browser and go to:
+
    ```
-   http://<IP-адрес-сервера>:5000
+   http://<server-ip>:5000
    ```
-   Например: `http://192.168.1.10:5000`
 
-3. Вводят свое имя и начинают общение!
+   Example: `http://192.168.1.10:5000`
 
-## 🔐 Регистрация и вход
+3. Enter their name and start chatting!
 
-### Первый запуск - Регистрация
+## 🔐 Registration and Login
 
-1. При первом посещении вы увидите экран регистрации
-2. Выберите язык интерфейса (עברית / Русский / English)
-3. Введите имя пользователя (минимум 3 символа)
-4. Введите пароль (минимум 4 символа)
-5. Нажмите "Зарегистрироваться"
+### First time – Registration
 
-### Последующие входы
+1. On first visit, you will see the registration screen
+2. Choose interface language (עברית / Русский / English)
+3. Enter username (minimum 3 characters)
+4. Enter password (minimum 4 characters)
+5. Click "Register"
 
-1. Откройте чат
-2. Нажмите "Уже есть аккаунт? Войти"
-3. Введите свой логин и пароль
-4. Нажмите "Войти"
+### Subsequent logins
 
-**Важно:** Каждый пользователь может быть онлайн только один раз. Нельзя войти повторно с того же аккаунта, пока не выйдете.
+1. Open the chat
+2. Click "Already have an account? Login"
+3. Enter your username and password
+4. Click "Login"
 
-## 🌐 Переключение языков
+**Important:** Each user can be online only once. You cannot log in from the same account simultaneously on multiple devices.
 
-В правом верхнем углу есть кнопки выбора языка:
-- **עברית** - иврит (текст справа налево)
-- **Русский** - русский язык
-- **English** - английский язык
+## 🌐 Language Switching
 
-Язык меняется мгновенно для всего интерфейса!
+In the top-right corner there are language buttons:
 
-## 🎨 Цвета пользователей
+* **עברית** – Hebrew (right-to-left text)
+* **Русский** – Russian
+* **English** – English
 
-Каждый зарегистрированный пользователь автоматически получает уникальный цвет:
-- Цвет присваивается при регистрации
-- Используется для аватара и имени пользователя
-- Помогает визуально различать участников чата
-**На русском:**
-- "Что такое IP адрес?"
-- "интеграл"
-- "формула квадратного уравнения"
+The interface language changes instantly!
 
-**На иврите:**
-- "מה זה כתובת IP?"
-- "זווית"
-- "שטח משולש"
+## 🎨 User Colors
 
-**На английском:**
-- "What is IP address?"
-- "integral"
-- "Pythagorean theoremормацию в папке `knowledge_base/`. 
+Each registered user automatically gets a unique color:
 
-### Добавление материалов
+* Assigned during registration
+* Used for avatar and username
+* Helps visually distinguish users
 
-1. Создайте TXT или HTML файлы с учебными материалами
-2. Поместите их в папку `knowledge_base/`
-3. Можно создавать подпапки для организации материалов
+## 🤖 TeacherBot Knowledge Base
 
-### Формат файлов
+TeacherBot searches for information in the `knowledge_base/` folder.
 
-**Текстовые файлы (.txt):**
+### Adding materials
+
+1. Create TXT or HTML files with educational content
+2. Place them in the `knowledge_base/` folder
+3. You can create subfolders for organization
+
+### File formats
+
+**Text files (.txt):**
+
 ```
-ТЕРМИН
+TERM
 
-Определение термина с подробным описанием.
-Можно использовать несколько абзацев.
+Definition of the term with detailed explanation.
+You can use multiple paragraphs.
 
 ---
 
-ДРУГОЙ ТЕРМИН
+ANOTHER TERM
 
-Ещё одно определение...
+Another definition...
 ```
 
-**HTML файлы (.html):**
+**HTML files (.html):**
+
 ```html
-<h1>Заголовок темы</h1>
-<p>Текст с определением...</p>
+<h1>Topic Title</h1>
+<p>Definition text...</p>
 ```
 
-### Примеры запросов к TeacherBot
+### Example TeacherBot queries
 
-- "Что такое IP адрес?"
-- "интеграл"
-- "формула квадратного уравнения"
-- "производная"
-- "тПервый вход
-1. Зарегистрируйтесь с уникальным именем пользователя
-2. Выберите предпочитаемый язык интерфейса
-3. Запомните свой пароль!
+* "What is an IP address?"
+* "integral"
+* "quadratic formula"
+* "derivative"
+* "Pythagorean theorem"
 
-### Выбор языка
-- Кнопки языков в правом верхнем углу
-- Переключение в любой момент
-- Иврит автоматически меняет направление текста (RTL)
+TeacherBot automatically:
 
-### еорема Пифагора"
+* Finds relevant information in files
+* Shows context around the found term
+* Suggests similar terms in case of typos
 
-TeacherBot автоматически:
-- Находит нужную информацию в файлах
-- Показывает контекст вокруг найденного термина
-- Предлагает похожие термины при опечатках
+## 🎮 Usage
 
-## 🎮 Использование
+### Public chat
 
-### Общий чат
-- Пишите сообщения в поле ввода
-- Нажмите Enter или кнопку отправки
-- Все участники увидят ваше сообщение
+* Type messages in the input field
+* Press Enter or click send
+* All participants will see your message
 
-### Приватные сообщения
-- **Двойной клик** на имени пользователя в списке
-- Или **правый клик** → "Личное сообщение"
-- Напишите сообщение и отправьте
+### Private messages
+
+* **Double-click** on a username
+* Or **right-click** → "Private message"
+* Write and send your message
 
 ### TeacherBot
-- Переключитесь на вкладку "🤖 TeacherBot"
-- Задайте вопрос (например: "Что такое интеграл?")
-- Получите ответ из базы знаний
 
-### Роль администратора
-- Первый подключившийся (учитель) автоматически становится админом
-- Админ отмечен значком 👑
-- При отключении админа, следующий пользователь получает права
+* Switch to the "🤖 TeacherBot" tab
+* Ask a question (e.g., "What is an integral?")
+* Get an answer from the knowledge base
 
-## 📦 Создание EXE файла
+### Administrator role
 
-Для создания автономного приложения:
+* The first connected user (teacher) becomes admin automatically
+* Admin is marked with 👑
+* If the admin disconnects, the next user becomes admin
 
-```bash с аутентификацией
-├── teacherbot.py          # Модуль TeacherBot для поиска
-├── requirements.txt       # Зависимости Python
-├── users_db.json          # База данных пользователей (создается автоматически)
-├── templates/
-│   └── index.html        # HTML страница чата (мультиязычная)
-├── static/
-│   ├── style.css         # Стили приложения (с RTL поддержкой)
-│   ├── app.js            # Клиентская логика (мультиязычность, аутентификация)
-│   └── translations.json # Переводы на 3 языка
-└── knowledge_base/       # База знаний (TXT/HTML файлы)
-    ├── basics.txt        # Статьи на русском
-    ├── math.html         # Математика на русском (HTML)
-    ├── hebrew_basics.txt # Статьи на иврите
-    └── hebrew_math.html  # Математика на иврите (HTML)Flask-SocketIO, WebSocket
-- **Frontend:** HTML5, CSS3, JavaScript (Vanilla)
-- **UI:** Современный градиентный дизайн, адаптивная верстка
-- **Search:** Полнотекстовый поиск с автокоррекцией
+## 📦 Creating an EXE file
 
-## 📁 Структура проекта
+For a standalone application:
+
+Project structure:
 
 ```
 CH/
-├── server.py              # Главный сервер Flask
-├── teacherbot.py          # Модуль TeacherBot для поиска
-├── requirements.txt       # Зависимости Python
+├── server.py              # Main Flask server
+├── teacherbot.py          # TeacherBot search module
+├── requirements.txt       # Python dependencies
+├── users_db.json          # User database (auto-created)
 ├── templates/
-│   └── index.html        # HTML страница чата
+│   └── index.html        # Chat HTML page (multilingual)
 ├── static/
-│   ├── style.css         # Стили приложения
-│   └── app.js            # Клиентская логика
-└── knowledge_base/       # База знаний (TXT/HTML файлы)
+│   ├── style.css         # Styles (RTL supported)
+│   ├── app.js            # Client logic (multilingual + auth)
+│   └── translations.json # Translations
+└── knowledge_base/       # Knowledge base (TXT/HTML files)
     ├── basics.txt
-    └── math.html
+    ├── math.html
+    ├── hebrew_basics.txt
+    └── hebrew_math.html
 ```
 
-## 🔧 Настройки
+### Technologies
 
-### Изменение порта
+* **Backend:** Flask-SocketIO, WebSocket
+* **Frontend:** HTML5, CSS3, JavaScript (Vanilla)
+* **UI:** Modern gradient design, responsive layout
+* **Search:** Full-text search with autocorrection
 
-В файле `server.py`, строка: на нужных языках
-   - Напишите IP-адрес на доске для учеников
-   - Первый вошедший = админ (обычно учитель)
-   - Файл `users_db.json` хранит всех зарегистрированных пользователей
+## 🔧 Configuration
 
-2. **Для учеников:**
-   - Зарегистрируйтесь один раз с уникальным именем
-   - Используйте настоящее имя для идентификации
-   - Выберите удобный язык интерфейса
-   - Ваш цвет будет виден всем участникам
-   - Приватные сообщения видны только вам и получателю
-   - TeacherBot работает на всех языках!
+### Changing the port
 
-Для production версии измените `debug=True` на `debug=False`.
+In `server.py`, modify the port value.
 
-## 💡 Советы
+For production, change:
 
-1. **Для учителя:**
-   - Запускайте сервер до начала урока
-   - Подготовьте материалы в `knowledge_base/`
-   - Напишите IP-адрес на доске для учеников
+```python
+debug=True
+```
 
-2. **Для учеников:**
-   - Используйте настоящее имя для идентификации
-  Не могу войти:**
-- Убедитесь, что вы зарегистрированы
-- Проверьте правильность пароля (минимум 4 символа)
-- Убедитесь, что не вошли с этого аккаунта на другом устройстве
+to:
 
-**Проблемы с ивритом:**
-- Убедитесь, что файлы сохранены в кодировке UTF-8
-- Направление текста (RTL) меняется автоматически
-- Если текст отображается неправильно, обновите страницу
+```python
+debug=False
+```
 
-**TeacherBot не находит информацию:**
-- Убедитесь, что файлы находятся в папке `knowledge_base/`
-- Проверьте кодировку файлов (должна быть UTF-8)
-- Попробуйте перезапустить сервер
-- TeacherBot ищет на всех языках в базе знаний
-   - Приложение работает в локальной сети без задержек
-   - Поддерживает до 50+ одновременных подключений
-   - База знаний загружается при старте сервера
+## 💡 Tips
 
-## 🐛 Решение проблем
+### For teachers:
 
-**Сервер не запускается:**
-- Проверьте, установлены ли все зависимости: `pip install -r requirements.txt`
-- Убедитесь, что порт 5000 не занят другим приложением
+* Start the server before the lesson
+* Prepare materials in `knowledge_base/`
+* Write the IP address on the board
 
-**Ученики не могут подключиться:**
-- Проверьте, что все в одной локальной сети
-- Убедитесь, что брандмауэр не блокирует порт 5000
-- Проверьте правильность IP-адреса
+### For students:
 
-**TeacherBot не находит информацию:**
-- Убедитесь, что файлы находятся в папке `knowledge_base/`
-- Проверьте кодировку файлов (должна быть UTF-8)
-- Попробуйте перезапустить сервер
+* Register once with a unique username
+* Use your real name for identification
+* Choose a comfortable interface language
+* Your color is visible to everyone
+* Private messages are visible only to you and the recipient
+* TeacherBot works in all languages
 
-## 📝 Лицензия
+## 🐛 Troubleshooting
 
-MIT License - используйте свободно в образовательных целях!
+**Server does not start:**
 
-## 🤝 Поддержка
+* Check dependencies: `pip install -r requirements.txt`
+* Ensure port 5000 is not in use
 
-При возникновении вопросов или проблем:
-- Проверьте консоль сервера на наличие ошибок
-- Убедитесь, что все файлы на месте
-- Проверьте логи в терминале
+**Students cannot connect:**
+
+* Make sure everyone is on the same local network
+* Check firewall settings (port 5000 must be open)
+* Verify the correct IP address
+
+**Cannot log in:**
+
+* Make sure you are registered
+* Check password (minimum 4 characters)
+* Ensure you're not logged in on another device
+
+**Hebrew issues:**
+
+* Ensure files are saved in UTF-8 encoding
+* RTL direction is automatic
+* Refresh the page if text appears incorrectly
+
+**TeacherBot cannot find information:**
+
+* Ensure files are in `knowledge_base/`
+* Check UTF-8 encoding
+* Restart the server
+* TeacherBot searches in all languages
+
+## 📝 License
+
+MIT License – free for educational use!
+
+## 🤝 Support
+
+If you encounter issues:
+
+* Check server console for errors
+* Ensure all files are present
+* Review terminal logs
 
 ---
 
-**Создано для образования. Работает полностью офлайн! 🎓**
+**Built for education. Fully offline! 🎓**
+
