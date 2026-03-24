@@ -4,25 +4,35 @@ echo ================================================
 echo Build EXE - School Auto Chat
 echo ================================================
 
-REM Activate venv if exists
+REM Activate venv if it exists, otherwise create it
 if exist ".venv\Scripts\activate.bat" (
   call .venv\Scripts\activate.bat
 ) else (
   echo Virtual environment not found. Creating .venv...
   python -m venv .venv
   call .venv\Scripts\activate.bat
+  pip install -r requirements.txt
 )
 
-echo Installing build-time dependencies...
+echo Installing / upgrading build-time dependencies...
 pip install -r requirements.txt
 
-echo Running PyInstaller (onefile) - this may take a while...
-pyinstaller --noconfirm --onefile \
-  --add-data "templates;templates" \
-  --add-data "static;static" \
-  --add-data "knowledge_base;knowledge_base" \
-  --add-data "users_db.json;." \
-  start_server.py
+echo.
+echo Running PyInstaller from SchoolAutoChat.spec ...
+echo (this may take a few minutes)
+pyinstaller --noconfirm SchoolAutoChat.spec
 
-echo Build finished. See dist\start_server.exe
+if errorlevel 1 (
+  echo.
+  echo ERROR: PyInstaller failed. See output above for details.
+  pause
+  exit /b 1
+)
+
+echo.
+echo ================================================
+echo Build finished!
+echo EXE is at:  dist\SchoolAutoChat.exe
+echo ================================================
+echo.
 pause

@@ -135,13 +135,13 @@
         <div>Double-click <strong>run.bat</strong> &mdash; the server starts. You will see the local address in the console window.</div>
       </li>
       <li>
-        <div>Open your browser and go to <code>http://localhost:5000</code> (or the address shown in the console).</div>
+        <div>Open your browser and go to <code>http://localhost:5002</code> (or the address shown in the console).</div>
       </li>
       <li>
         <div>Register with <strong>any username</strong> and the <strong>admin password</strong> (set in <code>server.py</code>, default: <code>teacher123</code>). You will automatically become the admin.</div>
       </li>
       <li>
-        <div>Share your <strong>LAN IP address</strong> with students (shown in the console, e.g. <code>http://192.168.1.5:5000</code>).</div>
+        <div>Share your <strong>LAN IP address</strong> with students (shown in the console, e.g. <code>http://192.168.1.5:5002</code>).</div>
       </li>
     </ol>
 
@@ -161,7 +161,7 @@
     <h2>🎒 Student Quick Start</h2>
     <ol class="steps">
       <li><div>Connect to the <strong>same Wi-Fi or network</strong> as the teacher's computer.</div></li>
-      <li><div>Open any browser and type the address the teacher shared, e.g. <code>http://192.168.1.5:5000</code>.</div></li>
+      <li><div>Open any browser and type the address the teacher shared, e.g. <code>http://192.168.1.5:5002</code>.</div></li>
       <li><div>Enter your <strong>name</strong> (or registered username) and a <strong>password</strong>. If you already registered, use the same credentials.</div></li>
       <li><div>You are in the classroom chat! Type in the message box and press <strong>Enter</strong> or click Send.</div></li>
     </ol>
@@ -291,7 +291,7 @@ TeacherBot: Found in IT_Glossary.txt:
     <table>
       <tr><th>Problem</th><th>Solution</th></tr>
       <tr><td>Students can't connect</td><td>Make sure Windows Firewall allowed the server. Check that devices are on the same network. Try <code>ping &lt;teacher-IP&gt;</code> from a student device.</td></tr>
-      <tr><td>Browser doesn't open automatically</td><td>Open it manually at <code>http://localhost:5002</code> (offline) or <code>http://localhost:5000</code> (online).</td></tr>
+      <tr><td>Browser doesn't open automatically</td><td>Open it manually at <code>http://localhost:5002</code> (offline) or <code>http://localhost:5002</code> (online).</td></tr>
       <tr><td>Server starts but shows errors</td><td>Check the console window for the error message. Most common: port already in use — the launcher will try the next available port automatically.</td></tr>
       <tr><td>TeacherBot says "not found"</td><td>Check that the <code>knowledge_base/</code> folder contains .txt or .html files and they are saved in UTF-8.</td></tr>
       <tr><td>Garbled text / encoding issues</td><td>Ensure all knowledge base files are saved as UTF-8 (no BOM recommended for .txt).</td></tr>

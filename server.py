@@ -1,11 +1,20 @@
 import os
 import sys
-# Ensure the directory containing this script is always in sys.path
-# (needed for Python embeddable package which doesn't add it automatically)
-_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-if _SCRIPT_DIR not in sys.path:
-    sys.path.insert(0, _SCRIPT_DIR)
-os.chdir(_SCRIPT_DIR)
+
+# ── PyInstaller / plain-Python path resolution ──────────────────────────────
+if getattr(sys, 'frozen', False):
+    # Running as a PyInstaller onefile EXE.
+    # sys.executable  → path to the EXE itself
+    # sys._MEIPASS    → temp folder where bundled files are extracted
+    _EXE_DIR    = os.path.dirname(sys.executable)
+    _BUNDLE_DIR = sys._MEIPASS
+else:
+    _EXE_DIR    = os.path.dirname(os.path.abspath(__file__))
+    _BUNDLE_DIR = _EXE_DIR
+
+if _EXE_DIR not in sys.path:
+    sys.path.insert(0, _EXE_DIR)
+os.chdir(_EXE_DIR)
 
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, join_room, leave_room
@@ -16,12 +25,17 @@ from teacherbot import TeacherBot
 import hashlib
 import socket as _socket
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    template_folder=os.path.join(_BUNDLE_DIR, 'templates'),
+    static_folder=os.path.join(_BUNDLE_DIR, 'static'),
+)
 app.config['SECRET_KEY'] = 'school-auto-chat-secret-key'
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 # Хранилище зарегистрированных пользователей
-USERS_FILE = 'users_db.json'
+# Always stored next to the EXE so data persists between runs
+USERS_FILE = os.path.join(_EXE_DIR, 'users_db.json')
 registered_users = {}
 
 # Хранилище активных пользователей (онлайн)
@@ -78,8 +92,16 @@ def generate_user_color(username):
     hash_value = sum(ord(c) for c in username)
     return colors[hash_value % len(colors)]
 
+# ── Knowledge-base path: prefer folder next to EXE, fall back to bundle ───
+_KB_USER   = os.path.join(_EXE_DIR, 'knowledge_base')
+_KB_BUNDLE = os.path.join(_BUNDLE_DIR, 'knowledge_base')
+if not os.path.exists(_KB_USER) and os.path.exists(_KB_BUNDLE):
+    import shutil
+    shutil.copytree(_KB_BUNDLE, _KB_USER)
+_KB_PATH = _KB_USER if os.path.exists(_KB_USER) else _KB_BUNDLE
+
 # Инициализация TeacherBot
-teacher_bot = TeacherBot('knowledge_base')
+teacher_bot = TeacherBot(_KB_PATH)
 
 @app.route('/')
 def index():
@@ -439,9 +461,10 @@ if __name__ == '__main__':
     load_users()
     print(f'Loaded {len(registered_users)} registered users')
 
-    # Создание папки для базы знаний, если её нет
-    if not os.path.exists('knowledge_base'):
-        os.makedirs('knowledge_base')
+    # Создание папки для базы знаний рядом с EXE, если её нет
+    kb_dir = os.path.join(_EXE_DIR, 'knowledge_base')
+    if not os.path.exists(kb_dir):
+        os.makedirs(kb_dir)
         print('Created knowledge_base folder - add your TXT and HTML files there!')
 
     # Определение порта: сначала аргумент командной строки, затем переменная окружения, иначе стандартный

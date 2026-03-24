@@ -1,6 +1,0 @@
-{
-  "ports": [5002,5003,8000,8888,5000,5001],
-  "openFirewall": false,
-  "wheelsPriority": true,
-  "buildExe": false
-}

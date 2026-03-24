@@ -62,7 +62,7 @@
 
 <div class="hero">
   <h1>🎓 School Auto Chat</h1>
-  <p>מדריך למשתמש &mdash; צ'אט כיתתי אופליין עם ТichерBot חכם</p>
+  <p>מדריך למשתמש &mdash; צ'אט כיתתי אופליין עם מורה-בוט חכם</p>
 </div>
 <div class="lang-bar">
   <a href="user_manual_chat_en.html">🇬🇧 English</a>
@@ -80,7 +80,7 @@
       <li><a href="#teacher-start">התחלה מהירה: מורה</a></li>
       <li><a href="#student-start">התחלה מהירה: תלמיד</a></li>
       <li><a href="#chat-features">תכונות הצ'אט</a></li>
-      <li><a href="#teacherbot">מדריך TeacherBot</a></li>
+      <li><a href="#teacherbot">מדריך מורה-בוט</a></li>
       <li><a href="#admin">כלי ניהול ומנהל</a></li>
       <li><a href="#offline">גרסה אופליין (USB / רשת)</a></li>
       <li><a href="#knowledge-base">פורמט בסיס הידע</a></li>
@@ -111,9 +111,9 @@
     <ol class="steps">
       <li><div>פתח את תיקיית <code>Chat</code> במחשב.</div></li>
       <li><div>לחץ פעמיים על <strong>run.bat</strong> — השרת יתחיל. בחלון הקונסול יופיע הכתובת.</div></li>
-      <li><div>פתח דפדפן וגלוש אל <code>http://localhost:5000</code>.</div></li>
+      <li><div>פתח דפדפן וגלוש אל <code>http://localhost:5002</code>.</div></li>
       <li><div>הירשם עם <strong>כל שם משתמש</strong> וה<strong>סיסמת מנהל</strong> (ברירת מחדל: <code>teacher123</code>, מוגדרת ב-<code>server.py</code>). תקבל אוטומטית הרשאות מנהל.</div></li>
-      <li><div>שתף עם התלמידים את <strong>כתובת ה-IP המקומית</strong> שלך (מוצגת בקונסול, לדוגמה: <code>http://192.168.1.5:5000</code>).</div></li>
+      <li><div>שתף עם התלמידים את <strong>כתובת ה-IP המקומית</strong> שלך (מוצגת בקונסול, לדוגמה: <code>http://192.168.1.5:5002</code>).</div></li>
     </ol>
 
     <div class="tip">✅ <strong>טיפ:</strong> כאשר חומת האש של Windows תשאל — לחץ <em>אפשר גישה</em>. זה הכרחי לחיבור התלמידים.</div>
@@ -132,7 +132,7 @@
     <h2>🎒 התחלה מהירה: תלמיד</h2>
     <ol class="steps">
       <li><div>ודא שאתה מחובר ל<strong>אותה רשת Wi-Fi או LAN</strong> כמו מחשב המורה.</div></li>
-      <li><div>פתח כל דפדפן והקלד את הכתובת שהמורה נתן, לדוגמה: <code>http://192.168.1.5:5000</code>.</div></li>
+      <li><div>פתח כל דפדפן והקלד את הכתובת שהמורה נתן, לדוגמה: <code>http://192.168.1.5:5002</code>.</div></li>
       <li><div>הכנס את <strong>שמך</strong> (או שם המשתמש הרשום) וה<strong>סיסמה</strong>.</div></li>
       <li><div>אתה בצ'אט הכיתה! כתוב הודעה בתחתית ולחץ <strong>Enter</strong> או כפתור השליחה.</div></li>
     </ol>
@@ -257,7 +257,7 @@ TeacherBot: נמצא ב-IT_Glossary.txt:
     <table>
       <tr><th>בעיה</th><th>פתרון</th></tr>
       <tr><td>תלמידים לא יכולים להתחבר</td><td>ודא שחומת האש של Windows אפשרה גישה לשרת. כל המכשירים חייבים להיות באותה רשת. נסה <code>ping &lt;IP המורה&gt;</code> ממכשיר תלמיד.</td></tr>
-      <tr><td>הדפדפן לא נפתח אוטומטית</td><td>פתח ידנית: <code>http://localhost:5002</code> (אופליין) או <code>http://localhost:5000</code> (מקוון).</td></tr>
+      <tr><td>הדפדפן לא נפתח אוטומטית</td><td>פתח ידנית: <code>http://localhost:5002</code> (אופליין) או <code>http://localhost:5002</code> (מקוון).</td></tr>
       <tr><td>השרת עולה אך יש שגיאות</td><td>בדוק את חלון הקונסול. הסיבה הנפוצה: פורט תפוס. ה-launcher ימצא פורט פנוי אוטומטית.</td></tr>
       <tr><td>TeacherBot מחזיר "לא נמצא"</td><td>ודא שבתיקיית <code>knowledge_base/</code> יש קבצי .txt או .html שמורים ב-UTF-8.</td></tr>
       <tr><td>תווים פגומים / בעיות קידוד</td><td>שמור מחדש את קבצי בסיס הידע ב-UTF-8 (ללא BOM עבור .txt).</td></tr>

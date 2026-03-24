@@ -13,9 +13,9 @@ python-3.11.9-embed-amd64.zip
 get-pip.py
 build/
 dist/
-*.spec
 server.log
 run_output.txt
+build_log.txt
 
 # IDE
 .vscode/
